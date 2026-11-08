@@ -1,0 +1,85 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  /** Page-specific joke incident, e.g. "sleep schedule". Omit for a clean bill of health. */
+  degraded?: string;
+  /** Extra mono note, e.g. "Reading mode: grid disabled for your eyes". */
+  note?: string;
+}
+
+const { degraded, note } = Astro.props;
+const deployed = new Date();
+const deployedLabel = deployed.toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+});
+---
+
+<div class="status-bar">
+  <div class="wrap inner">
+    <span class="item"><span class="dot ok" aria-hidden="true"></span>All systems operational</span>
+    {
+      degraded && (
+        <span class="item">
+          <span class="dot degraded" aria-hidden="true" />
+          Degraded: {degraded}
+        </span>
+      )
+    }
+    {note && <span class="item muted">{note}</span>}
+    <span class="item muted">
+      Last deploy: <time datetime={deployed.toISOString()}>{deployedLabel}</time>
+    </span>
+    <div class="toggle"><ThemeToggle /></div>
+  </div>
+</div>
+
+<style>
+  @layer components {
+    /* Ink strip by day, paper strip by night: the tokens swap, so this inverts for free. */
+    .status-bar {
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--font-mono);
+      font-size: var(--step-label);
+    }
+
+    .inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-2) var(--space-6);
+      padding-block: var(--space-2);
+    }
+
+    .item {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .muted {
+      color: color-mix(in oklab, var(--paper) 75%, var(--ink));
+    }
+
+    .dot {
+      inline-size: 8px;
+      block-size: 8px;
+      border-radius: 50%;
+    }
+
+    .ok {
+      background: var(--operational);
+    }
+
+    .degraded {
+      background: var(--signal);
+    }
+
+    .toggle {
+      margin-inline-start: auto;
+    }
+  }
+</style>

@@ -1,0 +1,70 @@
+---
+// Day/night switch. Hidden until JS runs; without JS the site follows prefers-color-scheme.
+---
+
+<div class="theme-toggle" role="group" aria-label="Colour scheme" hidden>
+  <button type="button" data-theme-value="day">Day</button>
+  <button type="button" data-theme-value="night">Night</button>
+</div>
+
+<script>
+  const group = document.querySelector<HTMLElement>('.theme-toggle');
+  const buttons = group?.querySelectorAll<HTMLButtonElement>('button') ?? [];
+  const darkQuery = matchMedia('(prefers-color-scheme: dark)');
+
+  const current = () =>
+    document.documentElement.dataset.theme ?? (darkQuery.matches ? 'night' : 'day');
+
+  const sync = () => {
+    const theme = current();
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.themeValue === theme)));
+  };
+
+  buttons.forEach((button) =>
+    button.addEventListener('click', () => {
+      const from = current();
+      const to = button.dataset.themeValue!;
+      if (from === to) return;
+      document.documentElement.dataset.theme = to;
+      try {
+        localStorage.setItem('theme', to);
+      } catch {}
+      console.info(`[INFO] shift change: ${from} → ${to}`);
+      sync();
+    }),
+  );
+
+  darkQuery.addEventListener('change', sync);
+  sync();
+  if (group) group.hidden = false;
+</script>
+
+<style>
+  @layer components {
+    .theme-toggle {
+      display: inline-flex;
+      border: var(--rule-mid) solid currentColor;
+    }
+
+    .theme-toggle[hidden] {
+      display: none;
+    }
+
+    button {
+      min-block-size: 2rem;
+      padding-inline: var(--space-3);
+      border: 0;
+      background: transparent;
+      font-family: var(--font-mono);
+      font-size: var(--step-label);
+      text-transform: uppercase;
+      cursor: pointer;
+
+      /* Lives on the inverted status bar, so the pressed segment flips back to paper on ink. */
+      &[aria-pressed='true'] {
+        background: var(--paper);
+        color: var(--ink);
+      }
+    }
+  }
+</style>

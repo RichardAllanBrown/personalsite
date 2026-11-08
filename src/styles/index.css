@@ -1,0 +1,9 @@
+/* Entry point. Layer order is declared once here; later layers win regardless of specificity. */
+@layer reset, fonts, tokens, base, layout, components, utilities;
+
+@import './reset.css' layer(reset);
+@import './fonts.css' layer(fonts);
+@import './tokens.css' layer(tokens);
+@import './base.css' layer(base);
+@import './layout.css' layer(layout);
+@import './utilities.css' layer(utilities);

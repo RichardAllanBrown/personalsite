@@ -1,0 +1,80 @@
+---
+import '../styles/index.css';
+import StatusBar from '../components/StatusBar.astro';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { site } from '../site.config';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Joke incident shown in the status bar. */
+  degraded?: string;
+  /** Extra status bar note. */
+  statusNote?: string;
+  /** Reading mode: drops the background grid. */
+  reading?: boolean;
+}
+
+const { title, description = site.description, degraded, statusNote, reading = false } = Astro.props;
+const fullTitle = title ? `${title} · ${site.name}` : site.name;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title={site.name} href={site.links.rss} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#eeebe3" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#121211" media="(prefers-color-scheme: dark)" />
+    <link rel="preload" href="/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/jetbrains-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    {/* Apply a saved theme before first paint so night shift never flashes day. */}
+    <script is:inline>
+      try {
+        const t = localStorage.getItem('theme');
+        if (t === 'day' || t === 'night') document.documentElement.dataset.theme = t;
+      } catch {}
+    </script>
+  </head>
+  <body data-reading={reading || undefined}>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <StatusBar degraded={degraded} note={statusNote} />
+    <SiteNav />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>
+
+<style>
+  @layer components {
+    .skip-link {
+      position: absolute;
+      inset-block-start: var(--space-2);
+      inset-inline-start: var(--space-2);
+      z-index: 10;
+      padding: var(--space-2) var(--space-4);
+      background: var(--signal);
+      color: var(--on-signal);
+      font-weight: 700;
+      translate: 0 -200%;
+
+      &:focus {
+        translate: 0;
+      }
+    }
+  }
+</style>

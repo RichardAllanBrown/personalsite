@@ -1,0 +1,81 @@
+html {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 100%;
+  line-height: 1.5;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--step-body);
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+}
+
+/* Reading mode: no grid behind body text. */
+body[data-reading] {
+  background-image: none;
+}
+
+main {
+  flex: 1;
+}
+
+/* Display type: Archivo expanded black, in capitals. */
+h1,
+h2 {
+  font-weight: 900;
+  font-stretch: 125%;
+  text-transform: uppercase;
+  line-height: 0.9;
+}
+
+h1 {
+  font-size: var(--step-h1);
+  letter-spacing: -0.03em;
+}
+
+h2 {
+  font-size: var(--step-h2);
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-size: var(--step-h3);
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 1.2;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.25em;
+  text-decoration-thickness: var(--rule-mid);
+
+  &:hover {
+    color: var(--signal-text);
+  }
+}
+
+:focus-visible {
+  outline: var(--rule-heavy) solid var(--signal);
+  outline-offset: 2px;
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+::selection {
+  background: var(--signal);
+  color: var(--on-signal);
+}

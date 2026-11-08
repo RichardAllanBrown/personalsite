@@ -1,0 +1,78 @@
+---
+import { site } from '../site.config';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap inner">
+    <p class="cta">
+      Found a bug?<br />
+      <a href={`mailto:${site.email}`}>Open an issue</a> (email me)
+    </p>
+    <div class="base">
+      <span>© {year} · hand-rolled, over-engineered, no cookies</span>
+      <ul role="list">
+        <li><a href={site.links.github}>GitHub</a></li>
+        <li><a href={site.links.linkedin}>LinkedIn</a></li>
+        <li><a href={site.links.rss}>RSS</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  @layer components {
+    .site-footer {
+      background: var(--deep);
+      color: var(--on-deep);
+    }
+
+    .inner {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-7);
+      padding-block: var(--space-8) var(--space-6);
+    }
+
+    .cta {
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 0.95;
+      font-weight: 900;
+      font-stretch: 125%;
+      text-transform: uppercase;
+
+      & a {
+        color: var(--signal);
+      }
+    }
+
+    .base {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-3) var(--space-6);
+      padding-block-start: var(--space-4);
+      border-block-start: var(--rule-hair) solid var(--deep-rule);
+      font-family: var(--font-mono);
+      font-size: var(--step-label);
+      color: var(--on-deep-muted);
+    }
+
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-5);
+      padding: 0;
+      list-style: none;
+    }
+
+    .base a {
+      color: var(--on-deep);
+
+      &:hover {
+        color: var(--signal);
+      }
+    }
+  }
+</style>

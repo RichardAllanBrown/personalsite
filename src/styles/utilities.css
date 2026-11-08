@@ -1,0 +1,30 @@
+/* Mono documentation voice: captions, dates, paths. */
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--step-label);
+  letter-spacing: 0.02em;
+}
+
+.meta {
+  color: var(--graphite);
+}
+
+/* Section tag: mono label on a Signal fill. */
+.tag-signal {
+  align-self: flex-start;
+  padding: 3px var(--space-2);
+  background: var(--signal);
+  color: var(--on-signal);
+  font-family: var(--font-mono);
+  font-size: var(--step-label);
+  font-weight: 700;
+}
+
+.visually-hidden:not(:focus, :active) {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

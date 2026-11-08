@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404: Incident" degraded="this page">
+  <section class="wrap incident">
+    <p class="tag-signal">INCIDENT · SEV 3 · 404</p>
+    <h1>Page not found</h1>
+    <p class="measure">
+      The requested route has no owner. It may have been decommissioned, renamed, or never shipped.
+      Root cause analysis is ongoing.
+    </p>
+    <p><a href="/">Return to /</a></p>
+  </section>
+</BaseLayout>
+
+<style>
+  .incident {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding-block: var(--space-8);
+  }
+
+  .incident a {
+    color: var(--signal-text);
+    font-weight: 700;
+  }
+</style>

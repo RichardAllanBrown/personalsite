@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout degraded="sleep schedule">
+  <header class="wrap hero">
+    <p class="label">FIG. 1: ONE (1) HUMAN, IN PRODUCTION SINCE [YEAR]</p>
+    <h1>Richard<br /><span class="outline">Brown</span></h1>
+    <p class="measure">
+      Scaffold rev 0. The spec block, architecture diagram, status rows and log land in build step 4.
+    </p>
+  </header>
+</BaseLayout>
+
+<style>
+  .hero {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding-block: var(--space-8);
+  }
+
+  h1 {
+    font-size: var(--step-display);
+    line-height: 0.82;
+  }
+
+  .outline {
+    color: transparent;
+    -webkit-text-stroke: var(--rule-heavy) var(--ink);
+  }
+</style>

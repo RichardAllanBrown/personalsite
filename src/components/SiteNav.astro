@@ -1,0 +1,72 @@
+---
+import { site } from '../site.config';
+
+const path = Astro.url.pathname.replace(/(\.html|\/)$/, '') || '/';
+const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`);
+---
+
+<nav class="site-nav" aria-label="Main">
+  <div class="wrap inner">
+    <a class="brand" href="/" aria-current={path === '/' ? 'page' : undefined}>
+      {site.handle}<span class="slash">/</span>
+    </a>
+    <ul role="list">
+      {
+        site.nav.map(({ href, label }) => (
+          <li>
+            <a href={href} aria-current={isCurrent(href) ? 'page' : undefined}>
+              {label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</nav>
+
+<style>
+  @layer components {
+    .site-nav {
+      border-block-end: var(--rule-heavy) solid var(--ink);
+      font-family: var(--font-mono);
+      font-size: var(--step-small);
+    }
+
+    .inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0 var(--space-6);
+    }
+
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 var(--space-5);
+      padding: 0;
+      list-style: none;
+    }
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      min-block-size: var(--target);
+      text-decoration: none;
+    }
+
+    .brand {
+      font-weight: 700;
+    }
+
+    .slash {
+      color: var(--signal-text);
+    }
+
+    ul a[aria-current='page'] {
+      text-decoration: underline;
+      text-decoration-color: var(--signal);
+      text-decoration-thickness: var(--rule-heavy);
+    }
+  }
+</style>

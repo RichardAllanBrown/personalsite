@@ -1,0 +1,71 @@
+/*
+ * Ops Manual tokens. Day and night ("night shift") values sit side by side in light-dark().
+ * The scheme follows the OS until the toggle sets data-theme on <html>.
+ */
+:root {
+  color-scheme: light dark;
+
+  /* Colour */
+  --paper: light-dark(#eeebe3, #121211);
+  --sheet: light-dark(#ffffff, #1c1c1a);
+  --ink: light-dark(#111110, #eeebe3);
+  --graphite: light-dark(#55524b, #a8a49a);
+  --rule: light-dark(#d8d4ca, #3a3936);
+  --signal: #ff4f00; /* fills only; text on it is always --on-signal */
+  --on-signal: #111110;
+  --signal-text: light-dark(#c23b00, #ff7a3d);
+  --operational: #3ddc84;
+  --reading-ink: light-dark(#111110, #e2dfd6);
+  --grid-line: light-dark(rgb(17 17 16 / 5%), rgb(238 235 227 / 6%));
+
+  /* Always-dark surfaces (footer, code). True black at night so they stay the darkest thing. */
+  --deep: light-dark(#111110, #000000);
+  --on-deep: #eeebe3;
+  --on-deep-muted: #b9b5ab;
+  --deep-rule: #3a3936;
+
+  /* Type */
+  --font-sans: 'Archivo', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --step-display: clamp(2.75rem, 12.5vw, 11rem); /* "RICHARD" must fit a 375px phone unbroken */
+  --step-h1: clamp(3rem, 8vw, 6rem);
+  --step-h2: clamp(1.75rem, 4vw, 2.5rem);
+  --step-h3: 1.5rem;
+  --step-read: 1.1875rem; /* 19px */
+  --step-body: 1.0625rem; /* 17px */
+  --step-small: 0.9375rem; /* 15px */
+  --step-label: 0.8125rem; /* 13px */
+  --step-tiny: 0.75rem; /* 12px */
+
+  /* Space: 8px base on a 24px grid */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --grid-size: 24px;
+
+  /* Rules */
+  --rule-hair: 1px;
+  --rule-mid: 2px;
+  --rule-heavy: 3px;
+  --rule-max: 4px;
+
+  /* Layout */
+  --wrap: 80rem; /* 1280px */
+  --measure: 42.5rem; /* 680px */
+  --gutter: clamp(1rem, 3vw, 1.5rem);
+  --target: 2.75rem; /* 44px minimum touch target */
+}
+
+:root[data-theme='day'] {
+  color-scheme: light;
+}
+
+:root[data-theme='night'] {
+  color-scheme: dark;
+}
