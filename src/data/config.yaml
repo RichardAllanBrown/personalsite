@@ -1,0 +1,9 @@
+# About page ~/.richardrc, top to bottom.
+items:
+  - { key: writing_is_architecture, value: 'true' }
+  - { key: optimise_for, value: deletion }
+  - { key: microservices, value: only_when_earned }
+  - { key: meetings, value: async_first }
+  - { key: tabs_vs_spaces, value: '[choose carefully]' }
+  - { key: humour, value: enabled, comment: cannot be disabled }
+  - { key: coffee, value: '[HOW YOU TAKE IT]' }

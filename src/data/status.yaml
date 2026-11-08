@@ -1,0 +1,21 @@
+# Home page uptime rows, top to bottom.
+# `writing` and `projects` rows are worked out from content at build time;
+# `manual` rows list incident days as "days ago" (0 = build day, max 44).
+items:
+  - id: curiosity
+    name: Curiosity
+    note: 100% uptime, no notes
+    source: manual
+  - id: writing
+    name: Writing
+    note: operational, with long gaps between deploys
+    source: writing
+  - id: side-projects
+    name: Side projects
+    note: 'degraded: too many started, few finished'
+    source: projects
+  - id: patience
+    name: Patience in meetings
+    note: partial outage, under investigation
+    source: manual
+    outages: [1, 2, 9, 15, 16, 24, 25, 26, 33, 34, 40, 43]

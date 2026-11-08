@@ -1,0 +1,10 @@
+# Home page spec block, top to bottom. Values in [BRACKETS] still need filling in.
+items:
+  - label: ROLE
+    value: Solutions architect, principal engineer
+  - label: UPTIME
+    value: 15 years, mostly without incident
+  - label: RUNTIME
+    value: Coffee, curiosity, [THIRD THING]
+  - label: KNOWN ISSUES
+    value: Emits puns under load

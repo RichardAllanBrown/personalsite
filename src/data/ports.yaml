@@ -1,0 +1,6 @@
+# About page "open ports". Hrefs in [BRACKETS] still need real values.
+items:
+  - { port: 25, protocol: SMTP, label: Email, href: 'mailto:[EMAIL]' }
+  - { port: 22, protocol: SSH-ish, label: GitHub, href: 'https://github.com/[USERNAME]' }
+  - { port: 443, protocol: Professional, label: LinkedIn, href: 'https://www.linkedin.com/in/[USERNAME]' }
+  - { port: 80, protocol: Feed, label: RSS, href: /rss.xml }

@@ -1,0 +1,18 @@
+# About page changelog, newest first: a career in semantic versioning.
+items:
+  - version: v4.0
+    period: now
+    title: '[Current role or chapter]'
+    line: '[One line. Breaking changes welcome.]'
+  - version: v3.0
+    period: '[YEARS]'
+    title: '[Principal Engineer, Company]'
+    line: 'Breaking change: began saying “it depends” professionally.'
+  - version: v2.0
+    period: '[YEARS]'
+    title: '[Solutions Architect, Company]'
+    line: '[One line]'
+  - version: v0.1
+    period: '[YEAR]'
+    title: '[First engineering job]'
+    line: '[Known issues at the time, honestly stated]'

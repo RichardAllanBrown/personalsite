@@ -33,8 +33,10 @@ Design source: the **Personal Site Design** canvas (Direction A, "Richard, as a 
 
 - **notes**: `title`, `description`, `date`, `updated?`, `tags[]`, `draft`. Read time computed at build.
 - **projects**: `title`, `summary`, `status: shipped | in-progress | abandoned`, `stack[]`, `started`, `ended?`, `featured`, `causeOfDeath?`, `writeUp?` (reference to a note).
-- **now**: frontmatter lists `shipped[]`, `inProgress[]`, `blockers[]`, `loadout{}`, `notDoing[]`, `updated`.
-- **site data** (`src/data/*.yaml`): spec block rows, changelog, `.richardrc`, open ports, jokey status rows.
+- **now**: one YAML file per revision in `src/content/now/` (`date`, `summary`, `shipped[]`, `inProgress[]`, `blockers[]`, `loadout{}`, `notDoing[]`). The newest is the live page; older ones are its change history and feed the home log.
+- **site data** (`src/data/*.yaml`): spec block rows, changelog, `.richardrc`, open ports, jokey status rows. Each file is a single `items:` list, because collections otherwise sort entries by id.
+- **drafts**: every collection has `draft`; drafts render in `astro dev` and never in production. All placeholder content from the design is seeded as drafts.
+- Helpers live in `src/lib/content.ts`: `getNotes`, `getProjects`, `getNowRevisions`, `getList`, `getLog`, `getStatusRows`.
 
 ## Build-time derived data
 

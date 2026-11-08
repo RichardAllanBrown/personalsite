@@ -1,0 +1,23 @@
+# One file per revision of /now, named by date. The newest non-draft file is the live page.
+date: 2026-11-08
+summary: '[what changed]'
+shipped:
+  - '[Something finished, at work or at home]'
+  - '[A post, a project, a trip]'
+inProgress:
+  - '[The main thing taking up headspace]'
+  - '[Something being learned]'
+  - '[Side project currently winning the attention war]'
+blockers:
+  - 'Only 24 hours in a day (raised upstream, ticket closed: won’t fix)'
+  - '[A real one, if you’re brave]'
+loadout:
+  reading: '[Book], by [Author]'
+  listening: '[Album or podcast]'
+  learning: '[Language, tool or skill]'
+  location: '[City] · [Timezone]'
+notDoing:
+  - '[Thing you’ve consciously put down]'
+  - '[Another one]'
+  - 'Rewriting this site in a new framework (for now)'
+draft: true # placeholder from the design
