@@ -85,7 +85,7 @@ src/styles/
 2. Tokens, reset, fonts, base layout, status bar, nav, footer, theme toggle (day + night)
 3. Content collections and schemas; seed with placeholder entries
 4. Home: spec block, architecture diagram, uptime rows from derived data, log
-5. Notes index + reading layout: Shiki dual theme, sidenotes, figures, decision record, RSS
+5. Notes index + reading layout: Shiki, sidenotes, figures, decision record, RSS. Shiki uses the `css-variables` theme instead of a dual theme: code sits on the always-dark `--deep` surface in both themes, so the token colours live in `src/styles/code.css`
 6. Projects (with the CSS filter), Now, About, 404
 7. Polish: OG images (build-time, optional), sitemap, headers, CI checks
 8. Replace every `[PLACEHOLDER]` with real content, then launch

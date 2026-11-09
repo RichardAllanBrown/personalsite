@@ -1,0 +1,37 @@
+/*
+ * Code blocks. Shiki's css-variables theme emits var(--astro-code-*) per token,
+ * mapped here onto the always-dark --deep surface so code looks the same by day and night.
+ */
+:root {
+  --astro-code-foreground: var(--on-deep);
+  --astro-code-background: var(--deep);
+  --astro-code-token-keyword: #ff7a3d;
+  --astro-code-token-constant: #f2c14e;
+  --astro-code-token-string: #3ddc84;
+  --astro-code-token-string-expression: #3ddc84;
+  --astro-code-token-comment: #8a867c;
+  --astro-code-token-function: #eeebe3;
+  --astro-code-token-parameter: #f2c14e;
+  --astro-code-token-punctuation: var(--on-deep-muted);
+  --astro-code-token-link: #ff7a3d;
+}
+
+pre.astro-code {
+  padding: var(--space-4) var(--space-5);
+  border-inline-start: var(--rule-max) solid var(--signal);
+  font-size: var(--step-small);
+  line-height: 1.6;
+  overflow-x: auto;
+  tab-size: 2;
+
+  & code {
+    font-size: inherit;
+  }
+}
+
+/* Inline code in running text. */
+:not(pre) > code {
+  padding: 0.1em 0.3em;
+  background: var(--sheet);
+  border: var(--rule-hair) solid var(--rule);
+}

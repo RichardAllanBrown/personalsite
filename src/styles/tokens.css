@@ -58,6 +58,7 @@
   /* Layout */
   --wrap: 80rem; /* 1280px */
   --measure: 42.5rem; /* 680px */
+  --sidenote: 15rem;
   --gutter: clamp(1rem, 3vw, 1.5rem);
   --target: 2.75rem; /* 44px minimum touch target */
 }

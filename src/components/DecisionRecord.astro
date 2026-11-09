@@ -1,0 +1,109 @@
+---
+// An architecture decision record, rendered as a spec sheet. Status drives the badge colour.
+interface Props {
+  /** e.g. "HADR-007" */
+  id: string;
+  title: string;
+  status: 'proposed' | 'accepted' | 'superseded' | 'regretted';
+  date?: string;
+  context: string;
+  decision: string;
+  cost: string;
+}
+
+const { id, title, status, date, context, decision, cost } = Astro.props;
+const rows = [
+  ['Context', context],
+  ['Decision', decision],
+  ['Cost', cost],
+] as const;
+---
+
+<section class="adr" aria-label={`${id}: ${title}`}>
+  <header class="head">
+    <span>{id}{date && ` · ${date}`}</span>
+    <span class="status" data-status={status}>{status.toUpperCase()}</span>
+  </header>
+  <p class="title">{title}</p>
+  <dl>
+    {
+      rows.map(([label, value]) => (
+        <div class="row">
+          <dt>{label}</dt>
+          <dd>{value}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</section>
+
+<style>
+  @layer components {
+    .adr {
+      background: var(--sheet);
+      border: var(--rule-heavy) solid var(--ink);
+      font-size: var(--step-small);
+    }
+
+    .head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-2) var(--space-3);
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--font-mono);
+      font-size: var(--step-tiny);
+    }
+
+    .status {
+      padding: 1px var(--space-2);
+      font-weight: 700;
+      border: var(--rule-hair) solid currentColor;
+
+      &[data-status='accepted'] {
+        background: var(--operational);
+        border-color: var(--operational);
+        color: var(--on-signal);
+      }
+
+      &[data-status='regretted'] {
+        background: var(--signal);
+        border-color: var(--signal);
+        color: var(--on-signal);
+      }
+    }
+
+    .title {
+      padding: var(--space-3);
+      font-weight: 800;
+      font-stretch: 112%;
+      font-size: 1.125rem;
+      line-height: 1.25;
+      border-block-end: var(--rule-hair) solid var(--rule);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 6rem 1fr;
+      gap: var(--space-4);
+      padding: var(--space-2) var(--space-3);
+
+      & + & {
+        border-block-start: var(--rule-hair) solid var(--rule);
+      }
+
+      & dt {
+        padding-block-start: 2px;
+        font-family: var(--font-mono);
+        font-size: var(--step-tiny);
+        text-transform: uppercase;
+      }
+    }
+
+    dd {
+      margin: 0;
+    }
+  }
+</style>

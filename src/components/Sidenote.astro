@@ -1,0 +1,26 @@
+---
+// Margin note for MDX. Put it on its own line straight after the paragraph it annotates:
+// .prose places it in the margin beside that paragraph on wide screens, and below it otherwise.
+---
+
+<aside class="sidenote label">
+  <slot />
+</aside>
+
+<style>
+  @layer components {
+    .sidenote {
+      padding-inline-start: var(--space-3);
+      border-inline-start: var(--rule-mid) solid var(--signal);
+      color: var(--graphite);
+      line-height: 1.5;
+      counter-increment: sidenote;
+
+      &::before {
+        content: 'NB ' counter(sidenote) ' · ';
+        color: var(--signal-text);
+        font-weight: 700;
+      }
+    }
+  }
+</style>

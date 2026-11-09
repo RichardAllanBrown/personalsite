@@ -1,0 +1,164 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+type Link = { href: string; title: string };
+
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  updated?: Date;
+  tags: string[];
+  minutes: number;
+  /** Neighbouring notes by date. */
+  older?: Link;
+  newer?: Link;
+}
+
+const { title, description, date, updated, tags, minutes, older, newer } = Astro.props;
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+---
+
+<BaseLayout title={title} description={description} reading statusNote="Reading mode: grid disabled for your eyes">
+  <article class="wrap">
+    <div class="column">
+      <header class="note-head">
+        <a class="label back" href="/notes">← /notes</a>
+        <p class="tag-signal">NOTE · {minutes} MIN READ</p>
+        <h1>{title}</h1>
+        <p class="lede">{description}</p>
+        <dl class="label meta facts">
+          <div><dt>Published</dt><dd><time datetime={iso(date)}>{iso(date)}</time></dd></div>
+          {
+            updated && (
+              <div>
+                <dt>Updated</dt>
+                <dd><time datetime={iso(updated)}>{iso(updated)}</time></dd>
+              </div>
+            )
+          }
+          {
+            tags.length > 0 && (
+              <div>
+                <dt>Tags</dt>
+                <dd>{tags.map((t) => `#${t}`).join(' ')}</dd>
+              </div>
+            )
+          }
+        </dl>
+      </header>
+
+      <div class="prose">
+        <slot />
+      </div>
+
+      {
+        (older || newer) && (
+          <nav class="pager" aria-label="More notes">
+            {newer && (
+              <a class="newer" href={newer.href}>
+                <span class="label meta">← Newer</span>
+                <span class="pager-title">{newer.title}</span>
+              </a>
+            )}
+            {older && (
+              <a class="older" href={older.href}>
+                <span class="label meta">Older →</span>
+                <span class="pager-title">{older.title}</span>
+              </a>
+            )}
+          </nav>
+        )
+      }
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  @layer components {
+    .column {
+      max-inline-size: calc(var(--measure) + var(--space-6) + var(--sidenote));
+      margin-inline: auto;
+      padding-block: var(--space-7) var(--space-8);
+    }
+
+    .note-head {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      max-inline-size: var(--measure);
+      padding-block-end: var(--space-6);
+      margin-block-end: var(--space-6);
+      border-block-end: var(--rule-heavy) solid var(--ink);
+    }
+
+    .back {
+      align-self: flex-start;
+      text-decoration: none;
+    }
+
+    h1 {
+      font-size: clamp(2.25rem, 6vw, 3.75rem);
+      line-height: 0.95;
+    }
+
+    .lede {
+      font-size: 1.25rem;
+      line-height: 1.45;
+      color: var(--graphite);
+    }
+
+    .facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2) var(--space-5);
+
+      & div {
+        display: flex;
+        gap: var(--space-2);
+      }
+
+      & dt::after {
+        content: ':';
+      }
+
+      & dd {
+        margin: 0;
+        color: var(--ink);
+      }
+    }
+
+    .pager {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+      gap: var(--space-4);
+      max-inline-size: var(--measure);
+      margin-block-start: var(--space-8);
+      padding-block-start: var(--space-5);
+      border-block-start: var(--rule-heavy) solid var(--ink);
+
+      & a {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-1);
+        padding: var(--space-3) var(--space-4);
+        border: var(--rule-hair) solid var(--ink);
+        background: var(--sheet);
+        text-decoration: none;
+
+        &:hover {
+          border-color: var(--signal);
+        }
+      }
+    }
+
+    .older {
+      grid-column: -2;
+      text-align: end;
+    }
+
+    .pager-title {
+      font-weight: 700;
+    }
+  }
+</style>

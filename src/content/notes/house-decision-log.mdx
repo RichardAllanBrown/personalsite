@@ -10,6 +10,8 @@ At work, every decision that is expensive to reverse gets written down: the cont
 
 So, naturally, I tried it at home. The first record was about the kitchen tap. The second was about whether we needed a second record about the kitchen tap.
 
+<Sidenote>It did not need a second record. That decision was not recorded.</Sidenote>
+
 ## What actually worked
 
 Writing down *why* turned out to matter far more than writing down *what*. Six months later nobody remembers why the boiler is set to 19°C, but the log does.
@@ -23,5 +25,21 @@ context: what forced the decision
 decision: what we chose
 cost: what it makes harder later
 ```
+
+Here is a real one, lightly redacted to protect the boiler.
+
+<DecisionRecord
+  id="HADR-004"
+  title="Heating stays at 19°C"
+  status="accepted"
+  date="2026-01-12"
+  context="Gas bill doubled; two people disagree about what 'cold' means."
+  decision="19°C day, 16°C night. Jumpers are the scaling strategy."
+  cost="One person is permanently slightly cold. Blankets are now load-bearing."
+/>
+
+<Figure n={1} caption="Decisions per month. Spikes correlate with DIY weekends.">
+  [Chart placeholder]
+</Figure>
 
 [The rest of the post.]

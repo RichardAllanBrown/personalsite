@@ -1,0 +1,36 @@
+---
+interface Props {
+  /** Figure number, shown as "FIG. n:". Numbering is manual so it can match references in the text. */
+  n: number | string;
+  caption: string;
+  /** Let the figure take the sidenote margin too. */
+  wide?: boolean;
+}
+
+const { n, caption, wide = false } = Astro.props;
+---
+
+<figure class:list={['figure', { wide }]}>
+  <div class="frame"><slot /></div>
+  <figcaption class="label meta">FIG. {n}: {caption}</figcaption>
+</figure>
+
+<style>
+  @layer components {
+    .figure {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .frame {
+      padding: var(--space-4);
+      background: var(--sheet);
+      border: var(--rule-heavy) solid var(--ink);
+
+      & :global(img) {
+        margin-inline: auto;
+      }
+    }
+  }
+</style>

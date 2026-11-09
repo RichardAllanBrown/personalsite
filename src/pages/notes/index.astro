@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getNotes, readingMinutes } from '../../lib/content';
+import { site } from '../../site.config';
+
+const notes = await getNotes();
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+---
+
+<BaseLayout title="Notes" description="Writing: notes on software, systems and the occasional household incident.">
+  <header class="wrap intro">
+    <p class="label meta">/notes · {notes.length} {notes.length === 1 ? 'entry' : 'entries'}</p>
+    <h1>Notes</h1>
+    <p class="measure">
+      Written down so I stop re-deriving them. Newest first. Also available as <a href={site.links.rss}>RSS</a>.
+    </p>
+  </header>
+
+  <section class="wrap listing" aria-label="All notes">
+    {
+      notes.length > 0 ? (
+        <ol class="notes" role="list">
+          {notes.map((note) => (
+            <li>
+              <article>
+                <p class="label meta stamp">
+                  <time datetime={iso(note.data.date)}>{iso(note.data.date)}</time>
+                  <span>{readingMinutes(note.body)} MIN</span>
+                  {note.data.draft && <span class="draft">DRAFT</span>}
+                </p>
+                <div class="body">
+                  <h2>
+                    <a href={`/notes/${note.id}`}>{note.data.title}</a>
+                  </h2>
+                  <p>{note.data.description}</p>
+                  {note.data.tags.length > 0 && (
+                    <p class="label meta">{note.data.tags.map((t) => `#${t}`).join(' ')}</p>
+                  )}
+                </div>
+              </article>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p class="label meta empty">No notes yet. Monitoring continues.</p>
+      )
+    }
+  </section>
+</BaseLayout>
+
+<style>
+  @layer components {
+    .intro {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      padding-block: var(--space-8) var(--space-7);
+    }
+
+    .listing {
+      padding-block-end: var(--space-8);
+    }
+
+    .notes {
+      padding: 0;
+      list-style: none;
+      border-block-start: var(--rule-heavy) solid var(--ink);
+
+      & li {
+        border-block-end: var(--rule-hair) solid var(--ink);
+      }
+    }
+
+    article {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2) var(--space-5);
+      padding-block: var(--space-5);
+    }
+
+    .stamp {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      inline-size: 11rem;
+      flex-shrink: 0;
+      padding-block-start: 4px;
+    }
+
+    .draft {
+      align-self: flex-start;
+      padding-inline: var(--space-1);
+      background: var(--signal);
+      color: var(--on-signal);
+      font-weight: 700;
+    }
+
+    .body {
+      flex: 1 1 25rem;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      max-inline-size: var(--measure);
+    }
+
+    h2 {
+      font-size: clamp(1.375rem, 3vw, 1.75rem);
+      line-height: 1;
+
+      & a {
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+          text-decoration-color: var(--signal);
+        }
+      }
+    }
+
+    .empty {
+      padding-block: var(--space-4);
+      border-block: var(--rule-heavy) solid var(--ink);
+    }
+  }
+</style>

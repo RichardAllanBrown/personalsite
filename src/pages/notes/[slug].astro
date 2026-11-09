@@ -1,0 +1,31 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import ReadingLayout from '../../layouts/ReadingLayout.astro';
+import Sidenote from '../../components/Sidenote.astro';
+import Figure from '../../components/Figure.astro';
+import DecisionRecord from '../../components/DecisionRecord.astro';
+import { getNotes, readingMinutes } from '../../lib/content';
+
+export const getStaticPaths = (async () => {
+  const notes = await getNotes();
+  const link = (n?: (typeof notes)[number]) => n && { href: `/notes/${n.id}`, title: n.data.title };
+  // Newest first, so the next index is the older note.
+  return notes.map((note, i) => ({
+    params: { slug: note.id },
+    props: { note, newer: link(notes[i - 1]), older: link(notes[i + 1]) },
+  }));
+}) satisfies GetStaticPaths;
+
+const { note, newer, older } = Astro.props;
+const { Content } = await render(note);
+const { title, description, date, updated, tags } = note.data;
+---
+
+<ReadingLayout
+  {...{ title, description, date, updated, tags, newer, older }}
+  minutes={readingMinutes(note.body)}
+>
+  {/* Passed in so notes can use these without importing them. */}
+  <Content components={{ Sidenote, Figure, DecisionRecord }} />
+</ReadingLayout>

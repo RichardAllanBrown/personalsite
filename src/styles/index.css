@@ -6,4 +6,6 @@
 @import './tokens.css' layer(tokens);
 @import './base.css' layer(base);
 @import './layout.css' layer(layout);
+@import './prose.css' layer(components);
+@import './code.css' layer(components);
 @import './utilities.css' layer(utilities);

@@ -12,6 +12,14 @@ export async function getNotes() {
   return notes.sort((a, b) => newestFirst(a.data.date, b.data.date));
 }
 
+const WORDS_PER_MINUTE = 230;
+
+/** Whole minutes, never zero. Counts words in the raw source, so code blocks count too. */
+export function readingMinutes(body = '') {
+  const words = body.split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / WORDS_PER_MINUTE));
+}
+
 export async function getProjects() {
   const projects = await getCollection('projects', isPublished);
   return projects.sort((a, b) =>

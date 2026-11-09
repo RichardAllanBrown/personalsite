@@ -9,4 +9,8 @@ export default defineConfig({
   trailingSlash: 'never',
   build: { format: 'file' },
   integrations: [mdx(), sitemap()],
+  markdown: {
+    // Token colours come from CSS custom properties (see src/styles/code.css), so code follows the theme.
+    shikiConfig: { theme: 'css-variables' },
+  },
 });
