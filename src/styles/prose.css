@@ -70,7 +70,7 @@
   }
 }
 
-@media (min-width: 64rem) {
+@media (width >= 64rem) {
   .prose {
     grid-template-columns: minmax(0, var(--measure)) var(--sidenote);
     column-gap: var(--space-6);

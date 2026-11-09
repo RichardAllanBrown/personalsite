@@ -19,20 +19,22 @@ const deployedLabel = deployed.toLocaleDateString('en-GB', {
 
 <div class="status-bar">
   <div class="wrap inner">
-    <span class="item"><span class="dot ok" aria-hidden="true"></span>All systems operational</span>
-    {
-      degraded && (
-        <span class="item">
-          <span class="dot degraded" aria-hidden="true" />
-          Degraded: {degraded}
-        </span>
-      )
-    }
+    <span class="item">
+      <span class="dot ok" aria-hidden="true"></span>All systems operational
+    </span>
+    {degraded && (
+      <span class="item">
+        <span class="dot degraded" aria-hidden="true" />
+        Degraded: {degraded}
+      </span>
+    )}
     {note && <span class="item muted">{note}</span>}
     <span class="item muted">
       Last deploy: <time datetime={deployed.toISOString()}>{deployedLabel}</time>
     </span>
-    <div class="toggle"><ThemeToggle /></div>
+    <div class="toggle">
+      <ThemeToggle />
+    </div>
   </div>
 </div>
 

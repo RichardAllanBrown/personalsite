@@ -2,7 +2,8 @@
 export const site = {
   name: 'Richard Brown',
   handle: 'richard.brown',
-  description: 'Richard Brown, documented like a system: notes, side projects and what I’m up to now.',
+  description:
+    'Richard Brown, documented like a system: notes, side projects and what I’m up to now.',
   email: '[EMAIL]',
   /** Year your career started: "in production since". */
   inProductionSince: '[YEAR]',

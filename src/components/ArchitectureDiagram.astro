@@ -18,9 +18,13 @@ const { caption, inputs, core, outputs } = Astro.props;
 <figure class="arch">
   <div class="flow">
     <div class="column">
-      <p class="label heading" id="arch-inputs">INPUTS</p>
+      <p class="label heading" id="arch-inputs">
+        INPUTS
+      </p>
       <ul role="list" aria-labelledby="arch-inputs">
-        {inputs.map((n) => <li class:list={['node', 'input', { dashed: n.dashed }]}>{n.label}</li>)}
+        {inputs.map((n) => (
+          <li class:list={['node', 'input', { dashed: n.dashed }]}>{n.label}</li>
+        ))}
       </ul>
     </div>
 
@@ -32,7 +36,9 @@ const { caption, inputs, core, outputs } = Astro.props;
       <p class="label heading">CORE</p>
       <p class="core-name">{core.name}</p>
       <ul>
-        {core.notes.map((note) => <li>{note}</li>)}
+        {core.notes.map((note) => (
+          <li>{note}</li>
+        ))}
       </ul>
     </div>
 
@@ -41,22 +47,22 @@ const { caption, inputs, core, outputs } = Astro.props;
     </svg>
 
     <div class="column">
-      <p class="label heading" id="arch-outputs">OUTPUTS</p>
+      <p class="label heading" id="arch-outputs">
+        OUTPUTS
+      </p>
       <ul role="list" aria-labelledby="arch-outputs">
-        {
-          outputs.map((o) =>
-            o.href ? (
-              <li>
-                <a class="node output" href={o.href}>
-                  <span class="output-label">{o.label}</span>
-                  <span class="label">{o.path ?? o.href} →</span>
-                </a>
-              </li>
-            ) : (
-              <li class:list={['node', 'input', { dashed: o.dashed }]}>{o.label}</li>
-            ),
-          )
-        }
+        {outputs.map((o) =>
+          o.href ? (
+            <li>
+              <a class="node output" href={o.href}>
+                <span class="output-label">{o.label}</span>
+                <span class="label">{o.path ?? o.href} →</span>
+              </a>
+            </li>
+          ) : (
+            <li class:list={['node', 'input', { dashed: o.dashed }]}>{o.label}</li>
+          ),
+        )}
       </ul>
     </div>
   </div>

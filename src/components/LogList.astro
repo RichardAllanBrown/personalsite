@@ -9,24 +9,22 @@ const { entries } = Astro.props;
 const iso = (d: Date) => d.toISOString().slice(0, 10);
 ---
 
-{
-  entries.length > 0 ? (
-    <ol class="log" role="list">
-      {entries.map((entry) => (
-        <li>
-          <a href={entry.href}>
-            <span class="label stamp">
-              <time datetime={iso(entry.date)}>{iso(entry.date)}</time> {entry.kind}
-            </span>
-            <span class="title">{entry.title}</span>
-          </a>
-        </li>
-      ))}
-    </ol>
-  ) : (
-    <p class="label meta empty">No entries yet. Monitoring continues.</p>
-  )
-}
+{entries.length > 0 ? (
+  <ol class="log" role="list">
+    {entries.map((entry) => (
+      <li>
+        <a href={entry.href}>
+          <span class="label stamp">
+            <time datetime={iso(entry.date)}>{iso(entry.date)}</time> {entry.kind}
+          </span>
+          <span class="title">{entry.title}</span>
+        </a>
+      </li>
+    ))}
+  </ol>
+) : (
+  <p class="label meta empty">No entries yet. Monitoring continues.</p>
+)}
 
 <style>
   @layer components {

@@ -6,10 +6,16 @@ interface Props {
 }
 
 const { status } = Astro.props;
-const labels = { shipped: 'SHIPPED', 'in-progress': 'IN PROGRESS', abandoned: 'DECOMMISSIONED' } as const;
+const labels = {
+  shipped: 'SHIPPED',
+  'in-progress': 'IN PROGRESS',
+  abandoned: 'DECOMMISSIONED',
+} as const;
 ---
 
-<span class="pill" data-status={status}>{labels[status]}</span>
+<span class="pill" data-status={status}>
+  {labels[status]}
+</span>
 
 <style>
   @layer components {

@@ -12,14 +12,12 @@ const { rows, revision } = Astro.props;
     <dt>SPEC</dt>
     <dd>rev {revision}</dd>
   </div>
-  {
-    rows.map(({ label, value }) => (
-      <div class="row">
-        <dt>{label}</dt>
-        <dd>{value}</dd>
-      </div>
-    ))
-  }
+  {rows.map(({ label, value }) => (
+    <div class="row">
+      <dt>{label}</dt>
+      <dd>{value}</dd>
+    </div>
+  ))}
 </dl>
 
 <style>

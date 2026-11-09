@@ -18,7 +18,11 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
 
 const filters = [
   { id: 'f-all', label: 'All', count: live.length },
-  { id: 'f-shipped', label: 'Shipped', count: live.filter((p) => p.data.status === 'shipped').length },
+  {
+    id: 'f-shipped',
+    label: 'Shipped',
+    count: live.filter((p) => p.data.status === 'shipped').length,
+  },
   {
     id: 'f-in-progress',
     label: 'In progress',
@@ -27,111 +31,135 @@ const filters = [
 ];
 ---
 
-<BaseLayout title="Projects" description="Side projects, as a service catalogue. Includes the graveyard.">
-  <PageHead title="Projects" label={`/projects · ${live.length} in service · ${graveyard.length} decommissioned`}>
-    Side projects, catalogued like services. Most exist because something annoyed me. The ones that didn’t
-    make it are listed at the bottom, with honest causes of death.
+<BaseLayout
+  title="Projects"
+  description="Side projects, as a service catalogue. Includes the graveyard."
+>
+  <PageHead
+    title="Projects"
+    label={`/projects · ${live.length} in service · ${graveyard.length} decommissioned`}
+  >
+    Side projects, catalogued like services. Most exist because something annoyed me. The ones that
+    didn’t make it are listed at the bottom, with honest causes of death.
   </PageHead>
 
   <section class="wrap section" aria-labelledby="catalogue">
-    <SectionHead id="catalogue" title="Service catalogue" note="filter is CSS only · no JS was harmed" />
+    <SectionHead
+      id="catalogue"
+      title="Service catalogue"
+      note="filter is CSS only · no JS was harmed"
+    />
 
     <div class="catalogue">
       {/* Radios are visually hidden but stay focusable; :has() on .catalogue does the filtering. */}
       <fieldset class="filters">
         <legend class="visually-hidden">Filter projects by status</legend>
-        {
-          filters.map((f, i) => (
-            <>
-              <input class="visually-hidden" type="radio" name="status" id={f.id} checked={i === 0} />
-              <label class="label" for={f.id}>
-                {f.label} <span class="count">{f.count}</span>
-              </label>
-            </>
-          ))
-        }
+        {filters.map((f, i) => (
+          <>
+            <input class="visually-hidden" type="radio" name="status" id={f.id} checked={i === 0} />
+            <label class="label" for={f.id}>
+              {f.label} <span class="count">{f.count}</span>
+            </label>
+          </>
+        ))}
       </fieldset>
 
-      {
-        live.length > 0 ? (
-          <ul class="grid" role="list">
-            {live.map((p) => {
-              const writeUp = writeUpHref(p.data.writeUp?.id);
-              return (
-                <li class="project" id={p.id} data-status={p.data.status} data-featured={p.data.featured || undefined}>
-                  <article>
-                    <header class="card-head">
-                      <StatusPill status={p.data.status} />
-                      <span class="label meta">
-                        <time datetime={iso(p.data.started)}>{month(p.data.started)}</time> →{' '}
-                        {p.data.ended ? <time datetime={iso(p.data.ended)}>{month(p.data.ended)}</time> : 'now'}
-                      </span>
-                    </header>
-                    <h3>{p.data.title}</h3>
-                    <p class="summary">{p.data.summary}</p>
-                    {p.data.stack.length > 0 && (
-                      <ul class="stack-list label" role="list" aria-label="Stack">
-                        {p.data.stack.map((s) => <li>{s}</li>)}
-                      </ul>
-                    )}
-                    {(p.data.url || p.data.repo || writeUp) && (
-                      <p class="links label">
-                        {p.data.url && <a href={p.data.url}>Live ↗</a>}
-                        {p.data.repo && <a href={p.data.repo}>Source ↗</a>}
-                        {writeUp && <a href={writeUp}>Write-up →</a>}
-                      </p>
-                    )}
-                    {p.data.draft && <span class="draft label">DRAFT</span>}
-                  </article>
-                </li>
-              );
-            })}
-          </ul>
-        ) : (
-          <p class="label meta empty">Nothing in service. Suspiciously quiet.</p>
-        )
-      }
+      {live.length > 0 ? (
+        <ul class="grid" role="list">
+          {live.map((p) => {
+            const writeUp = writeUpHref(p.data.writeUp?.id);
+            return (
+              <li
+                class="project"
+                id={p.id}
+                data-status={p.data.status}
+                data-featured={p.data.featured || undefined}
+              >
+                <article>
+                  <header class="card-head">
+                    <StatusPill status={p.data.status} />
+                    <span class="label meta">
+                      <time datetime={iso(p.data.started)}>{month(p.data.started)}</time> →{' '}
+                      {p.data.ended ? (
+                        <time datetime={iso(p.data.ended)}>{month(p.data.ended)}</time>
+                      ) : (
+                        'now'
+                      )}
+                    </span>
+                  </header>
+                  <h3>{p.data.title}</h3>
+                  <p class="summary">{p.data.summary}</p>
+                  {p.data.stack.length > 0 && (
+                    <ul class="stack-list label" role="list" aria-label="Stack">
+                      {p.data.stack.map((s) => (
+                        <li>{s}</li>
+                      ))}
+                    </ul>
+                  )}
+                  {(p.data.url || p.data.repo || writeUp) && (
+                    <p class="links label">
+                      {p.data.url && <a href={p.data.url}>Live ↗</a>}
+                      {p.data.repo && <a href={p.data.repo}>Source ↗</a>}
+                      {writeUp && <a href={writeUp}>Write-up →</a>}
+                    </p>
+                  )}
+                  {p.data.draft && <span class="draft label">DRAFT</span>}
+                </article>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p class="label meta empty">Nothing in service. Suspiciously quiet.</p>
+      )}
     </div>
   </section>
 
   <section class="wrap section graveyard-section" aria-labelledby="graveyard">
-    <SectionHead id="graveyard" title="Graveyard" note="post-mortems are blameless; causes of death are not" />
-    {
-      graveyard.length > 0 ? (
-        <div class="table-scroll" role="region" aria-labelledby="graveyard" tabindex="0">
-          <table class="graveyard">
-            <thead>
-              <tr>
-                <th scope="col">Project</th>
-                <th scope="col">In service</th>
-                <th scope="col">Stack</th>
-                <th scope="col">Cause of death</th>
-              </tr>
-            </thead>
-            <tbody>
-              {graveyard.map((p) => {
-                const writeUp = writeUpHref(p.data.writeUp?.id);
-                return (
-                  <tr id={p.id}>
-                    <th scope="row">
-                      {writeUp ? <a href={writeUp}>{p.data.title}</a> : p.data.title}
-                      <span class="summary">{p.data.summary}</span>
-                    </th>
-                    <td class="label">
-                      {month(p.data.started)} → {p.data.ended && month(p.data.ended)}
-                    </td>
-                    <td class="label">{p.data.stack.join(', ')}</td>
-                    <td>{p.data.causeOfDeath}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <p class="label meta empty">No casualties yet. Give it time.</p>
-      )
-    }
+    <SectionHead
+      id="graveyard"
+      title="Graveyard"
+      note="post-mortems are blameless; causes of death are not"
+    />
+    {graveyard.length > 0 ? (
+      <div
+        class="table-scroll"
+        role="group"
+        aria-label="Graveyard table, scrolls sideways"
+        tabindex="0"
+      >
+        <table class="graveyard">
+          <thead>
+            <tr>
+              <th scope="col">Project</th>
+              <th scope="col">In service</th>
+              <th scope="col">Stack</th>
+              <th scope="col">Cause of death</th>
+            </tr>
+          </thead>
+          <tbody>
+            {graveyard.map((p) => {
+              const writeUp = writeUpHref(p.data.writeUp?.id);
+              return (
+                <tr id={p.id}>
+                  <th scope="row">
+                    {writeUp ? <a href={writeUp}>{p.data.title}</a> : p.data.title}
+                    <span class="summary">{p.data.summary}</span>
+                  </th>
+                  <td class="label">
+                    {month(p.data.started)} → {p.data.ended && month(p.data.ended)}
+                  </td>
+                  <td class="label">{p.data.stack.join(', ')}</td>
+                  <td>{p.data.causeOfDeath}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    ) : (
+      <p class="label meta empty">No casualties yet. Give it time.</p>
+    )}
   </section>
 </BaseLayout>
 

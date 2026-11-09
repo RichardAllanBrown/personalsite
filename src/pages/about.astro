@@ -5,11 +5,18 @@ import SectionHead from '../components/SectionHead.astro';
 import { getList } from '../lib/content';
 import { site } from '../site.config';
 
-const [changelog, config, ports] = await Promise.all([getList('changelog'), getList('config'), getList('ports')]);
+const [changelog, config, ports] = await Promise.all([
+  getList('changelog'),
+  getList('config'),
+  getList('ports'),
+]);
 const rcName = `~/.${site.name.split(' ')[0]!.toLowerCase()}rc`;
 ---
 
-<BaseLayout title="About" description={`About ${site.name}: README, changelog, config and how to get in touch.`}>
+<BaseLayout
+  title="About"
+  description={`About ${site.name}: README, changelog, config and how to get in touch.`}
+>
   <PageHead title="About" label="/about · README.md" />
 
   <div class="wrap layout">
@@ -20,12 +27,13 @@ const rcName = `~/.${site.name.split(' ')[0]!.toLowerCase()}rc`;
       </header>
       <div class="prose">
         <p>
-          [PLACEHOLDER] Hi, I’m {site.name}. I’m a solutions architect and principal engineer, which mostly
-          means drawing boxes, deleting other boxes and asking what happens when this one falls over.
+          [PLACEHOLDER] Hi, I’m {site.name}. I’m a solutions architect and principal engineer, which
+          mostly means drawing boxes, deleting other boxes and asking what happens when this one
+          falls over.
         </p>
         <p>
-          [PLACEHOLDER] What I care about: systems that are boring to operate, documentation people actually
-          read, and decisions that are written down before they are argued about.
+          [PLACEHOLDER] What I care about: systems that are boring to operate, documentation people
+          actually read, and decisions that are written down before they are argued about.
         </p>
         <p>
           [PLACEHOLDER] Outside work: [hobbies]. This site is where I write things down so I stop
@@ -33,8 +41,8 @@ const rcName = `~/.${site.name.split(' ')[0]!.toLowerCase()}rc`;
         </p>
         <h2>Usage</h2>
         <p>
-          Best contacted asynchronously. Responds well to specific questions and good diagrams; poorly to
-          “quick calls”.
+          Best contacted asynchronously. Responds well to specific questions and good diagrams;
+          poorly to “quick calls”.
         </p>
       </div>
     </section>
@@ -50,19 +58,17 @@ const rcName = `~/.${site.name.split(' ')[0]!.toLowerCase()}rc`;
       <section class="stack" aria-labelledby="ports">
         <SectionHead id="ports" title="Open ports" note="all others filtered" />
         <ul class="ports" role="list">
-          {
-            ports.map(({ port, protocol, label, href }) => (
-              <li>
-                <a href={href}>
-                  <span class="label port">
-                    {port}/{protocol}
-                  </span>
-                  <span class="port-label">{label}</span>
-                  <span class="label state">OPEN</span>
-                </a>
-              </li>
-            ))
-          }
+          {ports.map(({ port, protocol, label, href }) => (
+            <li>
+              <a href={href}>
+                <span class="label port">
+                  {port}/{protocol}
+                </span>
+                <span class="port-label">{label}</span>
+                <span class="label state">OPEN</span>
+              </a>
+            </li>
+          ))}
         </ul>
       </section>
     </aside>
@@ -71,20 +77,18 @@ const rcName = `~/.${site.name.split(' ')[0]!.toLowerCase()}rc`;
   <section class="wrap section" aria-labelledby="changelog">
     <SectionHead id="changelog" title="Changelog" note="semantic versioning, loosely applied" />
     <ol class="changelog" role="list">
-      {
-        changelog.map(({ version, period, title, line }) => (
-          <li>
-            <p class="label version">
-              <strong>{version}</strong>
-              <span class="meta">{period}</span>
-            </p>
-            <div class="entry">
-              <h3>{title}</h3>
-              <p>{line}</p>
-            </div>
-          </li>
-        ))
-      }
+      {changelog.map(({ version, period, title, line }) => (
+        <li>
+          <p class="label version">
+            <strong>{version}</strong>
+            <span class="meta">{period}</span>
+          </p>
+          <div class="entry">
+            <h3>{title}</h3>
+            <p>{line}</p>
+          </div>
+        </li>
+      ))}
     </ol>
   </section>
 </BaseLayout>

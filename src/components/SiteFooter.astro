@@ -7,15 +7,22 @@ const year = new Date().getFullYear();
 <footer class="site-footer">
   <div class="wrap inner">
     <p class="cta">
-      Found a bug?<br />
+      Found a bug?
+      <br />
       <a href={`mailto:${site.email}`}>Open an issue</a> (email me)
     </p>
     <div class="base">
       <span>© {year} · hand-rolled, over-engineered, no cookies</span>
       <ul role="list">
-        <li><a href={site.links.github}>GitHub</a></li>
-        <li><a href={site.links.linkedin}>LinkedIn</a></li>
-        <li><a href={site.links.rss}>RSS</a></li>
+        <li>
+          <a href={site.links.github}>GitHub</a>
+        </li>
+        <li>
+          <a href={site.links.linkedin}>LinkedIn</a>
+        </li>
+        <li>
+          <a href={site.links.rss}>RSS</a>
+        </li>
       </ul>
     </div>
   </div>

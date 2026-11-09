@@ -11,8 +11,12 @@ const { n, caption, wide = false } = Astro.props;
 ---
 
 <figure class:list={['figure', { wide }]}>
-  <div class="frame"><slot /></div>
-  <figcaption class="label meta">FIG. {n}: {caption}</figcaption>
+  <div class="frame">
+    <slot />
+  </div>
+  <figcaption class="label meta">
+    FIG. {n}: {caption}
+  </figcaption>
 </figure>
 
 <style>

@@ -3,11 +3,19 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@12.16.1",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "build:drafts": "INCLUDE_DRAFTS=1 astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "format": "prettier --write .",
+    "lint": "prettier --check . && stylelint \"src/**/*.{css,astro}\"",
+    "validate": "html-validate \"dist/**/*.html\" && node scripts/check-links.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.1.3",
@@ -18,6 +26,12 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
+    "html-validate": "^11.19.0",
+    "postcss-html": "^2.0.0",
+    "prettier": "^3.9.10",
+    "prettier-plugin-astro": "^1.1.2",
+    "stylelint": "^18.0.0",
+    "stylelint-config-standard": "^41.0.0",
     "typescript": "^6.0.3"
   }
 }

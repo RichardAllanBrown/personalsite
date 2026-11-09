@@ -2,8 +2,9 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 
 type Draftable = { data: { draft: boolean } };
 
-/** Drafts show in `astro dev` only. */
-const isPublished = ({ data }: Draftable) => import.meta.env.DEV || !data.draft;
+/** Drafts show in `astro dev`, and in `pnpm build:drafts` so CI can validate them. Never in a deploy. */
+const includeDrafts = import.meta.env.DEV || process.env.INCLUDE_DRAFTS === '1';
+const isPublished = ({ data }: Draftable) => includeDrafts || !data.draft;
 
 const newestFirst = (a: Date, b: Date) => b.getTime() - a.getTime();
 

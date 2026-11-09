@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4 # version comes from packageManager in package.json
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Types
+        run: pnpm check
+
+      - name: Format and CSS lint
+        run: pnpm lint
+
+      # Drafts first, so the reading layout and every component get validated even before launch.
+      - name: Build with drafts
+        run: pnpm build:drafts
+
+      - name: Validate HTML and links (with drafts)
+        run: pnpm validate
+
+      # Then the build Cloudflare will actually deploy.
+      - name: Build
+        run: pnpm build
+
+      - name: Validate HTML and links
+        run: pnpm validate

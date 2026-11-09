@@ -4,28 +4,28 @@ Design source: the **Personal Site Design** canvas (Direction A, "Richard, as a 
 
 ## Decisions
 
-| Area | Choice | Why |
-|---|---|---|
-| Generator | Astro + MDX, TypeScript | Zero JS by default; content collections give typed frontmatter; components map 1:1 to the design's spec blocks, uptime rows, etc. |
-| Styling | Hand-written modern CSS, no frameworks | Custom properties for tokens, cascade layers, `:has()`, container queries, logical properties |
-| Hosting | Cloudflare (Workers static assets / Pages), free tier | Unlimited bandwidth, commercial use allowed, PR preview URLs. Vercel Hobby caps bandwidth and forbids commercial use |
-| Deploy | GitHub repo → Cloudflare git integration | Push to `main` deploys; PRs get previews |
-| Domain | Buy via Cloudflare Registrar | At-cost pricing, DNS already in the right place |
-| Fonts | Self-hosted, subset woff2 (Archivo variable incl. `wdth` axis, JetBrains Mono 400/700) | No third-party requests |
-| Analytics | None | Honours "no cookies" literally |
-| Client JS | Only the day/night toggle (~20 lines, inline in `<head>` to avoid flash) | Everything else is HTML + CSS |
+| Area      | Choice                                                                                 | Why                                                                                                                               |
+| --------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Generator | Astro + MDX, TypeScript                                                                | Zero JS by default; content collections give typed frontmatter; components map 1:1 to the design's spec blocks, uptime rows, etc. |
+| Styling   | Hand-written modern CSS, no frameworks                                                 | Custom properties for tokens, cascade layers, `:has()`, container queries, logical properties                                     |
+| Hosting   | Cloudflare (Workers static assets / Pages), free tier                                  | Unlimited bandwidth, commercial use allowed, PR preview URLs. Vercel Hobby caps bandwidth and forbids commercial use              |
+| Deploy    | GitHub repo → Cloudflare git integration                                               | Push to `main` deploys; PRs get previews                                                                                          |
+| Domain    | Buy via Cloudflare Registrar                                                           | At-cost pricing, DNS already in the right place                                                                                   |
+| Fonts     | Self-hosted, subset woff2 (Archivo variable incl. `wdth` axis, JetBrains Mono 400/700) | No third-party requests                                                                                                           |
+| Analytics | None                                                                                   | Honours "no cookies" literally                                                                                                    |
+| Client JS | Only the day/night toggle (~20 lines, inline in `<head>` to avoid flash)               | Everything else is HTML + CSS                                                                                                     |
 
 ## Pages
 
-| Route | Source | Notes |
-|---|---|---|
-| `/` | `pages/index.astro` | Hero + spec block, architecture diagram, status (uptime rows), log of latest entries |
-| `/notes`, `/notes/[slug]` | `content/notes/*.mdx` | Reading mode: no grid, 680px measure, sidenotes, Shiki highlighting, prev/next |
-| `/projects` | `content/projects/*.md` | Service catalogue; CSS-only filters; graveyard table |
-| `/now` | `content/now.md` (single entry) | Standup format; "Change history →" links to the file's GitHub history |
-| `/about` | `pages/about.astro` + data | README, changelog, `.richardrc`, open ports |
-| `/rss.xml` | `@astrojs/rss` | Notes (and optionally projects) |
-| `/404` | | "Incident" page in the same voice |
+| Route                     | Source                          | Notes                                                                                |
+| ------------------------- | ------------------------------- | ------------------------------------------------------------------------------------ |
+| `/`                       | `pages/index.astro`             | Hero + spec block, architecture diagram, status (uptime rows), log of latest entries |
+| `/notes`, `/notes/[slug]` | `content/notes/*.mdx`           | Reading mode: no grid, 680px measure, sidenotes, Shiki highlighting, prev/next       |
+| `/projects`               | `content/projects/*.md`         | Service catalogue; CSS-only filters; graveyard table                                 |
+| `/now`                    | `content/now.md` (single entry) | Standup format; "Change history →" links to the file's GitHub history                |
+| `/about`                  | `pages/about.astro` + data      | README, changelog, `.richardrc`, open ports                                          |
+| `/rss.xml`                | `@astrojs/rss`                  | Notes (and optionally projects)                                                      |
+| `/404`                    |                                 | "Incident" page in the same voice                                                    |
 
 `/uses` and `/status` (dashed in the sitemap) are deferred.
 
@@ -87,5 +87,5 @@ src/styles/
 4. Home: spec block, architecture diagram, uptime rows from derived data, log
 5. Notes index + reading layout: Shiki, sidenotes, figures, decision record, RSS. Shiki uses the `css-variables` theme instead of a dual theme: code sits on the always-dark `--deep` surface in both themes, so the token colours live in `src/styles/code.css`
 6. Projects (with the CSS filter), Now, About, 404
-7. Polish: OG images (build-time, optional), sitemap, headers, CI checks
+7. Polish: OG images (build-time, optional), sitemap, headers, CI checks. Done except OG images (still optional). The CSP is generated at build by `integrations/csp-headers.mjs` (Astro's built-in CSP skips `is:inline` scripts). CI is `.github/workflows/ci.yml`: types, Prettier, Stylelint, then html-validate and an internal link/fragment check (`scripts/check-links.mjs`) on both a drafts build and the production build
 8. Replace every `[PLACEHOLDER]` with real content, then launch

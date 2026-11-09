@@ -3,8 +3,12 @@
 ---
 
 <div class="theme-toggle" role="group" aria-label="Colour scheme" hidden>
-  <button type="button" data-theme-value="day">Day</button>
-  <button type="button" data-theme-value="night">Night</button>
+  <button type="button" data-theme-value="day">
+    Day
+  </button>
+  <button type="button" data-theme-value="night">
+    Night
+  </button>
 </div>
 
 <script>
@@ -43,7 +47,7 @@
   @layer components {
     .theme-toggle {
       display: inline-flex;
-      border: var(--rule-mid) solid currentColor;
+      border: var(--rule-mid) solid currentcolor;
     }
 
     .theme-toggle[hidden] {

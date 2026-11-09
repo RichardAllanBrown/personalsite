@@ -21,19 +21,22 @@ const rows = [
 
 <section class="adr" aria-label={`${id}: ${title}`}>
   <header class="head">
-    <span>{id}{date && ` · ${date}`}</span>
-    <span class="status" data-status={status}>{status.toUpperCase()}</span>
+    <span>
+      {id}
+      {date && ` · ${date}`}
+    </span>
+    <span class="status" data-status={status}>
+      {status.toUpperCase()}
+    </span>
   </header>
   <p class="title">{title}</p>
   <dl>
-    {
-      rows.map(([label, value]) => (
-        <div class="row">
-          <dt>{label}</dt>
-          <dd>{value}</dd>
-        </div>
-      ))
-    }
+    {rows.map(([label, value]) => (
+      <div class="row">
+        <dt>{label}</dt>
+        <dd>{value}</dd>
+      </div>
+    ))}
   </dl>
 </section>
 
@@ -60,7 +63,7 @@ const rows = [
     .status {
       padding: 1px var(--space-2);
       font-weight: 700;
-      border: var(--rule-hair) solid currentColor;
+      border: var(--rule-hair) solid currentcolor;
 
       &[data-status='accepted'] {
         background: var(--operational);

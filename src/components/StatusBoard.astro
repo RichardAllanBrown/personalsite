@@ -10,27 +10,31 @@ const { rows } = Astro.props;
 
 <div class="board">
   <ul role="list">
-    {
-      rows.map((row) => (
-        <li class="row">
-          <div class="row-head">
-            <span class="name">{row.name}</span>
-            <span class="label meta">{row.note}</span>
-          </div>
-          <div class="bars" aria-hidden="true">
-            {row.bars.map((state) => (
-              <span data-state={state} />
-            ))}
-          </div>
-          <p class="visually-hidden">{row.summary}</p>
-        </li>
-      ))
-    }
+    {rows.map((row) => (
+      <li class="row">
+        <div class="row-head">
+          <span class="name">{row.name}</span>
+          <span class="label meta">{row.note}</span>
+        </div>
+        <div class="bars" aria-hidden="true">
+          {row.bars.map((state) => (
+            <span data-state={state} />
+          ))}
+        </div>
+        <p class="visually-hidden">{row.summary}</p>
+      </li>
+    ))}
   </ul>
   <div class="legend label meta" aria-hidden="true">
-    <span><span class="key" data-state="up"></span>Operational</span>
-    <span><span class="key" data-state="down"></span>Incident</span>
-    <span><span class="key" data-state="none"></span>No data</span>
+    <span>
+      <span class="key" data-state="up"></span>Operational
+    </span>
+    <span>
+      <span class="key" data-state="down"></span>Incident
+    </span>
+    <span>
+      <span class="key" data-state="none"></span>No data
+    </span>
   </div>
 </div>
 

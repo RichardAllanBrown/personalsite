@@ -7,7 +7,7 @@
 
   /* Colour */
   --paper: light-dark(#eeebe3, #121211);
-  --sheet: light-dark(#ffffff, #1c1c1a);
+  --sheet: light-dark(#fff, #1c1c1a);
   --ink: light-dark(#111110, #eeebe3);
   --graphite: light-dark(#55524b, #a8a49a);
   --rule: light-dark(#d8d4ca, #3a3936);
@@ -19,14 +19,14 @@
   --grid-line: light-dark(rgb(17 17 16 / 5%), rgb(238 235 227 / 6%));
 
   /* Always-dark surfaces (footer, code). True black at night so they stay the darkest thing. */
-  --deep: light-dark(#111110, #000000);
+  --deep: light-dark(#111110, #000);
   --on-deep: #eeebe3;
   --on-deep-muted: #b9b5ab;
   --deep-rule: #3a3936;
 
   /* Type */
-  --font-sans: 'Archivo', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-sans: 'Archivo', 'Archivo Fallback', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'JetBrains Mono Fallback', ui-monospace, monospace;
 
   --step-display: clamp(2.75rem, 12.5vw, 11rem); /* "RICHARD" must fit a 375px phone unbroken */
   --step-h1: clamp(3rem, 8vw, 6rem);

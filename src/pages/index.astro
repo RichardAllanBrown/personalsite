@@ -15,7 +15,11 @@ const [spec, statusRows, log] = await Promise.all([getList('spec'), getStatusRow
   <header class="wrap hero">
     <div class="hero-title">
       <p class="label">FIG. 1: ONE (1) HUMAN, IN PRODUCTION SINCE {site.inProductionSince}</p>
-      <h1>Richard<br /><span class="outline">Brown</span></h1>
+      <h1>
+        Richard
+        <br />
+        <span class="outline">Brown</span>
+      </h1>
     </div>
     <div class="hero-spec">
       <SpecBlock rows={spec} revision={site.specRevision} />
@@ -24,7 +28,11 @@ const [spec, statusRows, log] = await Promise.all([getList('spec'), getStatusRow
 
   <section class="band" aria-labelledby="architecture">
     <div class="wrap section">
-      <SectionHead id="architecture" title="Architecture of a person" note="simplified, heavily · not to scale" />
+      <SectionHead
+        id="architecture"
+        title="Architecture of a person"
+        note="simplified, heavily · not to scale"
+      />
       <ArchitectureDiagram
         caption="FIG. 2: High-level architecture. Arrows indicate the direction of caffeine."
         inputs={[
