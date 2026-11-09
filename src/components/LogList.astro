@@ -1,0 +1,73 @@
+---
+import type { LogEntry } from '../lib/content';
+
+interface Props {
+  entries: LogEntry[];
+}
+
+const { entries } = Astro.props;
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+---
+
+{
+  entries.length > 0 ? (
+    <ol class="log" role="list">
+      {entries.map((entry) => (
+        <li>
+          <a href={entry.href}>
+            <span class="label stamp">
+              <time datetime={iso(entry.date)}>{iso(entry.date)}</time> {entry.kind}
+            </span>
+            <span class="title">{entry.title}</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  ) : (
+    <p class="label meta empty">No entries yet. Monitoring continues.</p>
+  )
+}
+
+<style>
+  @layer components {
+    .log {
+      padding: 0;
+      list-style: none;
+      border-block-start: var(--rule-heavy) solid var(--ink);
+      font-size: 1.125rem;
+
+      & li {
+        border-block-end: var(--rule-hair) solid var(--ink);
+      }
+    }
+
+    a {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-1) var(--space-5);
+      padding-block: var(--space-4);
+      text-decoration: none;
+
+      &:hover .title {
+        text-decoration: underline;
+        text-decoration-color: var(--signal);
+      }
+    }
+
+    .stamp {
+      inline-size: 11rem;
+      flex-shrink: 0;
+      padding-block-start: 3px;
+    }
+
+    .title {
+      flex: 1 1 25rem;
+      font-weight: 700;
+    }
+
+    .empty {
+      padding-block: var(--space-4);
+      border-block: var(--rule-heavy) solid var(--ink);
+    }
+  }
+</style>

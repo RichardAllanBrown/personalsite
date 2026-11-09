@@ -4,6 +4,10 @@ export const site = {
   handle: 'richard.brown',
   description: 'Richard Brown, documented like a system: notes, side projects and what I’m up to now.',
   email: '[EMAIL]',
+  /** Year your career started: "in production since". */
+  inProductionSince: '[YEAR]',
+  /** Spec block revision; bump it with each year of experience. */
+  specRevision: '15.0',
   links: {
     github: 'https://github.com/[USERNAME]',
     linkedin: 'https://www.linkedin.com/in/[USERNAME]',

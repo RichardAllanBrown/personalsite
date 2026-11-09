@@ -1,32 +1,125 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SpecBlock from '../components/SpecBlock.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ArchitectureDiagram from '../components/ArchitectureDiagram.astro';
+import StatusBoard from '../components/StatusBoard.astro';
+import LogList from '../components/LogList.astro';
+import { getList, getLog, getStatusRows, UPTIME_DAYS } from '../lib/content';
+import { site } from '../site.config';
+
+const [spec, statusRows, log] = await Promise.all([getList('spec'), getStatusRows(), getLog(5)]);
 ---
 
 <BaseLayout degraded="sleep schedule">
   <header class="wrap hero">
-    <p class="label">FIG. 1: ONE (1) HUMAN, IN PRODUCTION SINCE [YEAR]</p>
-    <h1>Richard<br /><span class="outline">Brown</span></h1>
-    <p class="measure">
-      Scaffold rev 0. The spec block, architecture diagram, status rows and log land in build step 4.
-    </p>
+    <div class="hero-title">
+      <p class="label">FIG. 1: ONE (1) HUMAN, IN PRODUCTION SINCE {site.inProductionSince}</p>
+      <h1>Richard<br /><span class="outline">Brown</span></h1>
+    </div>
+    <div class="hero-spec">
+      <SpecBlock rows={spec} revision={site.specRevision} />
+    </div>
   </header>
+
+  <section class="band" aria-labelledby="architecture">
+    <div class="wrap section">
+      <SectionHead id="architecture" title="Architecture of a person" note="simplified, heavily · not to scale" />
+      <ArchitectureDiagram
+        caption="FIG. 2: High-level architecture. Arrows indicate the direction of caffeine."
+        inputs={[
+          { label: 'books.stack' },
+          { label: 'coffee.queue' },
+          { label: '[hobby].feed' },
+          { label: 'your_email (optional)', dashed: true },
+        ]}
+        core={{
+          name: 'brain.service',
+          notes: [
+            'Single-threaded, tries to run with paralellism > 1',
+            'Garbage collection sometimes evicts useful data',
+            'Cache of opinions is frequently stale',
+          ],
+        }}
+        outputs={[
+          { label: 'Notes', href: '/notes' },
+          { label: 'Projects', href: '/projects' },
+          { label: 'What I’m up to', href: '/now' },
+          { label: 'dev_humour', dashed: true },
+        ]}
+      />
+    </div>
+  </section>
+
+  <section class="wrap section" aria-labelledby="status">
+    <SectionHead
+      id="status"
+      title="Status"
+      note={`last ${UPTIME_DAYS} days · self-reported, so treat with suspicion`}
+    />
+    <StatusBoard rows={statusRows} />
+  </section>
+
+  <section class="wrap section log-section" aria-labelledby="log">
+    <SectionHead id="log" title="Log" />
+    <LogList entries={log} />
+  </section>
 </BaseLayout>
 
 <style>
-  .hero {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-    padding-block: var(--space-8);
-  }
+  @layer components {
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: var(--space-6) var(--space-7);
+      padding-block: var(--space-8);
+    }
 
-  h1 {
-    font-size: var(--step-display);
-    line-height: 0.82;
-  }
+    .hero-title {
+      flex: 999 1 36rem;
+      min-inline-size: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      container-type: inline-size;
+    }
 
-  .outline {
-    color: transparent;
-    -webkit-text-stroke: var(--rule-heavy) var(--ink);
+    .hero-spec {
+      flex: 1 1 18rem;
+      max-inline-size: 24rem;
+    }
+
+    /* "RICHARD" is ~5.9em wide, so 16cqi keeps it on one line in whatever space the spec block leaves. */
+    h1 {
+      font-size: clamp(2.5rem, 16cqi, 11rem);
+      line-height: 0.82;
+    }
+
+    .outline {
+      color: transparent;
+      -webkit-text-stroke: var(--rule-heavy) var(--ink);
+    }
+
+    /* Full-bleed white band, as in the design. */
+    .band {
+      background: var(--sheet);
+      border-block: var(--rule-heavy) solid var(--ink);
+    }
+
+    .section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+      padding-block: var(--space-8) 0;
+    }
+
+    .band .section {
+      padding-block: var(--space-7);
+    }
+
+    .log-section {
+      padding-block-end: var(--space-8);
+    }
   }
 </style>

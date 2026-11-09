@@ -1,0 +1,27 @@
+---
+// H2 with a mono aside on the right, the heading pattern every home section uses.
+interface Props {
+  id: string;
+  title: string;
+  note?: string;
+}
+
+const { id, title, note } = Astro.props;
+---
+
+<div class="section-head">
+  <h2 id={id}>{title}</h2>
+  {note && <p class="label meta">{note}</p>}
+</div>
+
+<style>
+  @layer components {
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-3);
+    }
+  }
+</style>

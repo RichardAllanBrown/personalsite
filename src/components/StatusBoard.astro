@@ -1,0 +1,108 @@
+---
+import type { StatusRow } from '../lib/content';
+
+interface Props {
+  rows: StatusRow[];
+}
+
+const { rows } = Astro.props;
+---
+
+<div class="board">
+  <ul role="list">
+    {
+      rows.map((row) => (
+        <li class="row">
+          <div class="row-head">
+            <span class="name">{row.name}</span>
+            <span class="label meta">{row.note}</span>
+          </div>
+          <div class="bars" aria-hidden="true">
+            {row.bars.map((state) => (
+              <span data-state={state} />
+            ))}
+          </div>
+          <p class="visually-hidden">{row.summary}</p>
+        </li>
+      ))
+    }
+  </ul>
+  <div class="legend label meta" aria-hidden="true">
+    <span><span class="key" data-state="up"></span>Operational</span>
+    <span><span class="key" data-state="down"></span>Incident</span>
+    <span><span class="key" data-state="none"></span>No data</span>
+  </div>
+</div>
+
+<style>
+  @layer components {
+    .board {
+      background: var(--sheet);
+      border: var(--rule-heavy) solid var(--ink);
+    }
+
+    ul {
+      padding: 0;
+      list-style: none;
+    }
+
+    .row {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      padding: var(--space-4) var(--space-5);
+      border-block-end: var(--rule-hair) solid var(--rule);
+    }
+
+    .row-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-1) var(--space-4);
+    }
+
+    .name {
+      font-size: 1.125rem;
+      font-weight: 700;
+    }
+
+    .bars {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      gap: clamp(1px, 0.3vw, 3px);
+      block-size: 30px;
+    }
+
+    [data-state='up'] {
+      background: var(--ink);
+    }
+
+    [data-state='down'] {
+      background: var(--signal);
+    }
+
+    [data-state='none'] {
+      background: var(--rule);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2) var(--space-5);
+      padding: var(--space-3) var(--space-5);
+
+      & > span {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+      }
+    }
+
+    .key {
+      inline-size: 10px;
+      block-size: 10px;
+    }
+  }
+</style>

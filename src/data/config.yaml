@@ -4,6 +4,6 @@ items:
   - { key: optimise_for, value: deletion }
   - { key: microservices, value: only_when_earned }
   - { key: meetings, value: async_first }
-  - { key: tabs_vs_spaces, value: '[choose carefully]' }
+  - { key: tabs_vs_spaces, value: 'silly_debate' }
   - { key: humour, value: enabled, comment: cannot be disabled }
-  - { key: coffee, value: '[HOW YOU TAKE IT]' }
+  - { key: coffee, value: 'yes' }

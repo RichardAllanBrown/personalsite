@@ -1,0 +1,65 @@
+---
+interface Props {
+  rows: { label: string; value: string }[];
+  revision: string;
+}
+
+const { rows, revision } = Astro.props;
+---
+
+<dl class="spec">
+  <div class="head">
+    <dt>SPEC</dt>
+    <dd>rev {revision}</dd>
+  </div>
+  {
+    rows.map(({ label, value }) => (
+      <div class="row">
+        <dt>{label}</dt>
+        <dd>{value}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  @layer components {
+    .spec {
+      background: var(--sheet);
+      border: var(--rule-heavy) solid var(--ink);
+      font-size: var(--step-small);
+    }
+
+    .head {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-4);
+      padding: var(--space-2) var(--space-3);
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--font-mono);
+      font-size: var(--step-tiny);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 7rem 1fr;
+      gap: var(--space-4);
+      padding: var(--space-2) var(--space-3);
+
+      & + & {
+        border-block-start: var(--rule-hair) solid var(--rule);
+      }
+
+      & dt {
+        padding-block-start: 2px;
+        font-family: var(--font-mono);
+        font-size: var(--step-tiny);
+      }
+    }
+
+    dd {
+      margin: 0;
+    }
+  }
+</style>
