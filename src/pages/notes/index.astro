@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHead from '../../components/PageHead.astro';
 import { getNotes, readingMinutes } from '../../lib/content';
 import { site } from '../../site.config';
 
@@ -8,13 +9,9 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
 ---
 
 <BaseLayout title="Notes" description="Writing: notes on software, systems and the occasional household incident.">
-  <header class="wrap intro">
-    <p class="label meta">/notes · {notes.length} {notes.length === 1 ? 'entry' : 'entries'}</p>
-    <h1>Notes</h1>
-    <p class="measure">
-      Written down so I stop re-deriving them. Newest first. Also available as <a href={site.links.rss}>RSS</a>.
-    </p>
-  </header>
+  <PageHead title="Notes" label={`/notes · ${notes.length} ${notes.length === 1 ? 'entry' : 'entries'}`}>
+    Written down so I stop re-deriving them. Newest first. Also available as <a href={site.links.rss}>RSS</a>.
+  </PageHead>
 
   <section class="wrap listing" aria-label="All notes">
     {
@@ -50,13 +47,6 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
 
 <style>
   @layer components {
-    .intro {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-4);
-      padding-block: var(--space-8) var(--space-7);
-    }
-
     .listing {
       padding-block-end: var(--space-8);
     }

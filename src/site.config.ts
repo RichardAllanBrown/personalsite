@@ -8,6 +8,8 @@ export const site = {
   inProductionSince: '[YEAR]',
   /** Spec block revision; bump it with each year of experience. */
   specRevision: '15.0',
+  /** Source repo; /now links to its file history. */
+  repo: 'https://github.com/RichardAllanBrown/personalsite',
   links: {
     github: 'https://github.com/[USERNAME]',
     linkedin: 'https://www.linkedin.com/in/[USERNAME]',

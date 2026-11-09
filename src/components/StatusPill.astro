@@ -1,0 +1,44 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  status: CollectionEntry<'projects'>['data']['status'];
+}
+
+const { status } = Astro.props;
+const labels = { shipped: 'SHIPPED', 'in-progress': 'IN PROGRESS', abandoned: 'DECOMMISSIONED' } as const;
+---
+
+<span class="pill" data-status={status}>{labels[status]}</span>
+
+<style>
+  @layer components {
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 1px var(--space-2);
+      border: var(--rule-hair) solid var(--ink);
+      font-family: var(--font-mono);
+      font-size: var(--step-tiny);
+      font-weight: 700;
+      white-space: nowrap;
+
+      &::before {
+        content: '';
+        inline-size: 7px;
+        block-size: 7px;
+        border-radius: 50%;
+        background: var(--graphite);
+      }
+
+      &[data-status='shipped']::before {
+        background: var(--operational);
+      }
+
+      &[data-status='in-progress']::before {
+        background: var(--signal);
+      }
+    }
+  }
+</style>

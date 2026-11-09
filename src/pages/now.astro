@@ -1,0 +1,256 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { getNowRevisions } from '../lib/content';
+import { site } from '../site.config';
+
+const [current, ...history] = await getNowRevisions();
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+const historyHref = `${site.repo}/commits/main/src/content/now`;
+
+const standup = current && [
+  { id: 'shipped', title: 'Shipped', note: 'yesterday, roughly', items: current.data.shipped },
+  { id: 'in-progress', title: 'In progress', note: 'today, optimistically', items: current.data.inProgress },
+  { id: 'blockers', title: 'Blockers', note: 'escalated to nobody', items: current.data.blockers },
+];
+
+const loadoutLabels = { reading: 'READING', listening: 'LISTENING', learning: 'LEARNING', location: 'LOCATION' };
+const loadout =
+  current &&
+  (Object.keys(loadoutLabels) as (keyof typeof loadoutLabels)[])
+    .filter((key) => current.data.loadout[key])
+    .map((key) => ({ label: loadoutLabels[key], value: current.data.loadout[key]! }));
+---
+
+<BaseLayout title="Now" description="What I’m working on, reading and deliberately not doing, in standup format.">
+  <PageHead
+    title="Now"
+    label={current ? `/now · last updated ${iso(current.data.date)}` : '/now · no status reported'}
+  >
+    A standup for whoever’s asking: what shipped, what’s in flight, what’s in the way. It’s a <a
+      href="https://nownownow.com/about">/now page</a>, so it goes stale; check the date.
+  </PageHead>
+
+  {
+    current && standup && loadout ? (
+      <>
+        <section class="wrap section" aria-label="Standup">
+          <div class="standup">
+            {standup.map(({ id, title, note, items }) => (
+              <section class="card" aria-labelledby={id}>
+                <header class="card-head">
+                  <h2 id={id}>{title}</h2>
+                  <span class="label meta">{note}</span>
+                </header>
+                {items.length > 0 ? (
+                  <ul role="list">
+                    {items.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p class="label meta">None reported.</p>
+                )}
+              </section>
+            ))}
+          </div>
+        </section>
+
+        <section class="wrap section split">
+          <div class="stack">
+            <SectionHead id="loadout" title="Loadout" />
+            <dl class="loadout" aria-labelledby="loadout">
+              {loadout.map(({ label, value }) => (
+                <div class="row">
+                  <dt>{label}</dt>
+                  <dd>{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <div class="stack">
+            <SectionHead id="not-doing" title="Not doing" note="consciously descoped" />
+            <ul class="not-doing" role="list" aria-labelledby="not-doing">
+              {current.data.notDoing.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section class="wrap section history-section" aria-labelledby="history">
+          <SectionHead id="history" title="Previous revisions" />
+          {history.length > 0 ? (
+            <ol class="history" role="list">
+              {history.map((r) => (
+                <li>
+                  <time class="label" datetime={iso(r.data.date)}>
+                    {iso(r.data.date)}
+                  </time>
+                  <span>{r.data.summary}</span>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p class="label meta">This is the first revision.</p>
+          )}
+          <p class="label">
+            <a href={historyHref}>Change history →</a>
+          </p>
+        </section>
+      </>
+    ) : (
+      <section class="wrap section history-section">
+        <p class="label meta empty">No status reported. Assume heads down, or asleep.</p>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  @layer components {
+    .section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+      padding-block-end: var(--space-8);
+    }
+
+    .standup {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+      border: var(--rule-heavy) solid var(--ink);
+      background: var(--sheet);
+      overflow: hidden;
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      padding: var(--space-5);
+      /* Rules between cards whichever way they wrap; the outer border hides the overhang. */
+      box-shadow:
+        calc(-1 * var(--rule-mid)) 0 0 var(--ink),
+        0 calc(-1 * var(--rule-mid)) 0 var(--ink);
+
+      & ul {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-3);
+        padding: 0;
+        list-style: none;
+      }
+
+      & li {
+        display: grid;
+        grid-template-columns: 1.25rem 1fr;
+
+        &::before {
+          content: '→';
+          color: var(--signal-text);
+          font-family: var(--font-mono);
+        }
+      }
+    }
+
+    .card-head {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      padding-block-end: var(--space-3);
+      border-block-end: var(--rule-hair) solid var(--rule);
+
+      & h2 {
+        font-size: 1.5rem;
+      }
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+      gap: var(--space-7);
+    }
+
+    .stack {
+      --stack-gap: var(--space-5);
+    }
+
+    .loadout {
+      background: var(--sheet);
+      border: var(--rule-heavy) solid var(--ink);
+
+      & .row {
+        display: grid;
+        grid-template-columns: 7rem 1fr;
+        gap: var(--space-4);
+        padding: var(--space-3);
+
+        & + .row {
+          border-block-start: var(--rule-hair) solid var(--rule);
+        }
+      }
+
+      & dt {
+        padding-block-start: 2px;
+        font-family: var(--font-mono);
+        font-size: var(--step-tiny);
+      }
+
+      & dd {
+        margin: 0;
+      }
+    }
+
+    .not-doing {
+      padding: 0;
+      list-style: none;
+      border-block-start: var(--rule-heavy) solid var(--ink);
+
+      & li {
+        display: grid;
+        grid-template-columns: 1.5rem 1fr;
+        padding-block: var(--space-3);
+        border-block-end: var(--rule-hair) solid var(--ink);
+
+        &::before {
+          content: '✕';
+          color: var(--signal-text);
+          font-family: var(--font-mono);
+          font-weight: 700;
+        }
+      }
+    }
+
+    .history {
+      padding: 0;
+      list-style: none;
+      border-block-start: var(--rule-heavy) solid var(--ink);
+
+      & li {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-1) var(--space-5);
+        padding-block: var(--space-3);
+        border-block-end: var(--rule-hair) solid var(--ink);
+      }
+
+      & time {
+        inline-size: 11rem;
+        padding-block-start: 3px;
+      }
+    }
+
+    .history-section a {
+      color: var(--signal-text);
+      font-weight: 700;
+    }
+
+    .empty {
+      padding-block: var(--space-4);
+      border-block: var(--rule-heavy) solid var(--ink);
+    }
+  }
+</style>

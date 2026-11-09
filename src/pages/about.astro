@@ -1,0 +1,253 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { getList } from '../lib/content';
+import { site } from '../site.config';
+
+const [changelog, config, ports] = await Promise.all([getList('changelog'), getList('config'), getList('ports')]);
+const rcName = `~/.${site.name.split(' ')[0]!.toLowerCase()}rc`;
+---
+
+<BaseLayout title="About" description={`About ${site.name}: README, changelog, config and how to get in touch.`}>
+  <PageHead title="About" label="/about · README.md" />
+
+  <div class="wrap layout">
+    <section class="readme" aria-labelledby="readme">
+      <header class="file-head label">
+        <span id="readme">README.md</span>
+        <span>rev {site.specRevision}</span>
+      </header>
+      <div class="prose">
+        <p>
+          [PLACEHOLDER] Hi, I’m {site.name}. I’m a solutions architect and principal engineer, which mostly
+          means drawing boxes, deleting other boxes and asking what happens when this one falls over.
+        </p>
+        <p>
+          [PLACEHOLDER] What I care about: systems that are boring to operate, documentation people actually
+          read, and decisions that are written down before they are argued about.
+        </p>
+        <p>
+          [PLACEHOLDER] Outside work: [hobbies]. This site is where I write things down so I stop
+          re-deriving them. It’s over-engineered on purpose.
+        </p>
+        <h2>Usage</h2>
+        <p>
+          Best contacted asynchronously. Responds well to specific questions and good diagrams; poorly to
+          “quick calls”.
+        </p>
+      </div>
+    </section>
+
+    <aside class="side">
+      <section class="stack" aria-labelledby="rc">
+        <SectionHead id="rc" title="Config" note={rcName} />
+        <pre class="rc"><code>{config.map(({ key, value, comment }) => (
+          <span class="line"><span class="key">{key}</span><span class="op"> = </span><span class="value">{value}</span>{comment && <span class="comment">  # {comment}</span>}{'\n'}</span>
+        ))}</code></pre>
+      </section>
+
+      <section class="stack" aria-labelledby="ports">
+        <SectionHead id="ports" title="Open ports" note="all others filtered" />
+        <ul class="ports" role="list">
+          {
+            ports.map(({ port, protocol, label, href }) => (
+              <li>
+                <a href={href}>
+                  <span class="label port">
+                    {port}/{protocol}
+                  </span>
+                  <span class="port-label">{label}</span>
+                  <span class="label state">OPEN</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </aside>
+  </div>
+
+  <section class="wrap section" aria-labelledby="changelog">
+    <SectionHead id="changelog" title="Changelog" note="semantic versioning, loosely applied" />
+    <ol class="changelog" role="list">
+      {
+        changelog.map(({ version, period, title, line }) => (
+          <li>
+            <p class="label version">
+              <strong>{version}</strong>
+              <span class="meta">{period}</span>
+            </p>
+            <div class="entry">
+              <h3>{title}</h3>
+              <p>{line}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+</BaseLayout>
+
+<style>
+  @layer components {
+    .layout {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+      gap: var(--space-7);
+      align-items: start;
+      padding-block-end: var(--space-8);
+    }
+
+    .readme {
+      background: var(--sheet);
+      border: var(--rule-heavy) solid var(--ink);
+
+      /* No sidenotes here, so no margin column. */
+      & .prose {
+        grid-template-columns: minmax(0, 1fr);
+        padding: var(--space-5);
+      }
+    }
+
+    .file-head {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-4);
+      padding: var(--space-2) var(--space-3);
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .side {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-7);
+    }
+
+    .stack {
+      --stack-gap: var(--space-5);
+    }
+
+    /* Hand-coloured with the same token palette Shiki uses for notes. */
+    .rc {
+      padding: var(--space-4) var(--space-5);
+      background: var(--deep);
+      color: var(--on-deep);
+      border-inline-start: var(--rule-max) solid var(--signal);
+      font-size: var(--step-small);
+      line-height: 1.7;
+      overflow-x: auto;
+    }
+
+    .key {
+      color: var(--astro-code-token-keyword);
+    }
+
+    .op {
+      color: var(--astro-code-token-punctuation);
+    }
+
+    .value {
+      color: var(--astro-code-token-string);
+    }
+
+    .comment {
+      color: var(--astro-code-token-comment);
+      font-style: italic;
+    }
+
+    .ports {
+      padding: 0;
+      list-style: none;
+      border-block-start: var(--rule-heavy) solid var(--ink);
+
+      & li {
+        border-block-end: var(--rule-hair) solid var(--ink);
+      }
+
+      & a {
+        display: grid;
+        grid-template-columns: 9rem 1fr auto;
+        align-items: baseline;
+        gap: var(--space-3);
+        min-block-size: var(--target);
+        padding-block: var(--space-3);
+        text-decoration: none;
+
+        &:hover .port-label {
+          text-decoration: underline;
+          text-decoration-color: var(--signal);
+        }
+      }
+    }
+
+    .port-label {
+      font-weight: 700;
+    }
+
+    .state {
+      color: var(--ink);
+      font-weight: 700;
+
+      &::before {
+        content: '';
+        display: inline-block;
+        inline-size: 7px;
+        block-size: 7px;
+        margin-inline-end: var(--space-2);
+        border-radius: 50%;
+        background: var(--operational);
+      }
+    }
+
+    .section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+      padding-block-end: var(--space-8);
+    }
+
+    .changelog {
+      padding: 0;
+      list-style: none;
+      border-block-start: var(--rule-heavy) solid var(--ink);
+
+      & li {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2) var(--space-5);
+        padding-block: var(--space-5);
+        border-block-end: var(--rule-hair) solid var(--ink);
+      }
+    }
+
+    .version {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      inline-size: 11rem;
+      flex-shrink: 0;
+      padding-block-start: 4px;
+
+      & strong {
+        align-self: flex-start;
+        padding-inline: var(--space-2);
+        background: var(--ink);
+        color: var(--paper);
+      }
+    }
+
+    li:first-child .version strong {
+      background: var(--signal);
+      color: var(--on-signal);
+    }
+
+    .entry {
+      flex: 1 1 25rem;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+  }
+</style>

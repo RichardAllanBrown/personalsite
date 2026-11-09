@@ -1,0 +1,342 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import SectionHead from '../components/SectionHead.astro';
+import StatusPill from '../components/StatusPill.astro';
+import { getNotes, getProjects } from '../lib/content';
+
+const [projects, notes] = await Promise.all([getProjects(), getNotes()]);
+const live = projects.filter((p) => p.data.status !== 'abandoned');
+const graveyard = projects.filter((p) => p.data.status === 'abandoned');
+
+// A write-up only gets a link if that note is actually published.
+const noteIds = new Set(notes.map((n) => n.id));
+const writeUpHref = (id?: string) => (id && noteIds.has(id) ? `/notes/${id}` : undefined);
+
+const month = (d: Date) => d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+
+const filters = [
+  { id: 'f-all', label: 'All', count: live.length },
+  { id: 'f-shipped', label: 'Shipped', count: live.filter((p) => p.data.status === 'shipped').length },
+  {
+    id: 'f-in-progress',
+    label: 'In progress',
+    count: live.filter((p) => p.data.status === 'in-progress').length,
+  },
+];
+---
+
+<BaseLayout title="Projects" description="Side projects, as a service catalogue. Includes the graveyard.">
+  <PageHead title="Projects" label={`/projects · ${live.length} in service · ${graveyard.length} decommissioned`}>
+    Side projects, catalogued like services. Most exist because something annoyed me. The ones that didn’t
+    make it are listed at the bottom, with honest causes of death.
+  </PageHead>
+
+  <section class="wrap section" aria-labelledby="catalogue">
+    <SectionHead id="catalogue" title="Service catalogue" note="filter is CSS only · no JS was harmed" />
+
+    <div class="catalogue">
+      {/* Radios are visually hidden but stay focusable; :has() on .catalogue does the filtering. */}
+      <fieldset class="filters">
+        <legend class="visually-hidden">Filter projects by status</legend>
+        {
+          filters.map((f, i) => (
+            <>
+              <input class="visually-hidden" type="radio" name="status" id={f.id} checked={i === 0} />
+              <label class="label" for={f.id}>
+                {f.label} <span class="count">{f.count}</span>
+              </label>
+            </>
+          ))
+        }
+      </fieldset>
+
+      {
+        live.length > 0 ? (
+          <ul class="grid" role="list">
+            {live.map((p) => {
+              const writeUp = writeUpHref(p.data.writeUp?.id);
+              return (
+                <li class="project" id={p.id} data-status={p.data.status} data-featured={p.data.featured || undefined}>
+                  <article>
+                    <header class="card-head">
+                      <StatusPill status={p.data.status} />
+                      <span class="label meta">
+                        <time datetime={iso(p.data.started)}>{month(p.data.started)}</time> →{' '}
+                        {p.data.ended ? <time datetime={iso(p.data.ended)}>{month(p.data.ended)}</time> : 'now'}
+                      </span>
+                    </header>
+                    <h3>{p.data.title}</h3>
+                    <p class="summary">{p.data.summary}</p>
+                    {p.data.stack.length > 0 && (
+                      <ul class="stack-list label" role="list" aria-label="Stack">
+                        {p.data.stack.map((s) => <li>{s}</li>)}
+                      </ul>
+                    )}
+                    {(p.data.url || p.data.repo || writeUp) && (
+                      <p class="links label">
+                        {p.data.url && <a href={p.data.url}>Live ↗</a>}
+                        {p.data.repo && <a href={p.data.repo}>Source ↗</a>}
+                        {writeUp && <a href={writeUp}>Write-up →</a>}
+                      </p>
+                    )}
+                    {p.data.draft && <span class="draft label">DRAFT</span>}
+                  </article>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <p class="label meta empty">Nothing in service. Suspiciously quiet.</p>
+        )
+      }
+    </div>
+  </section>
+
+  <section class="wrap section graveyard-section" aria-labelledby="graveyard">
+    <SectionHead id="graveyard" title="Graveyard" note="post-mortems are blameless; causes of death are not" />
+    {
+      graveyard.length > 0 ? (
+        <div class="table-scroll" role="region" aria-labelledby="graveyard" tabindex="0">
+          <table class="graveyard">
+            <thead>
+              <tr>
+                <th scope="col">Project</th>
+                <th scope="col">In service</th>
+                <th scope="col">Stack</th>
+                <th scope="col">Cause of death</th>
+              </tr>
+            </thead>
+            <tbody>
+              {graveyard.map((p) => {
+                const writeUp = writeUpHref(p.data.writeUp?.id);
+                return (
+                  <tr id={p.id}>
+                    <th scope="row">
+                      {writeUp ? <a href={writeUp}>{p.data.title}</a> : p.data.title}
+                      <span class="summary">{p.data.summary}</span>
+                    </th>
+                    <td class="label">
+                      {month(p.data.started)} → {p.data.ended && month(p.data.ended)}
+                    </td>
+                    <td class="label">{p.data.stack.join(', ')}</td>
+                    <td>{p.data.causeOfDeath}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p class="label meta empty">No casualties yet. Give it time.</p>
+      )
+    }
+  </section>
+</BaseLayout>
+
+<style>
+  @layer components {
+    .section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+      padding-block-end: var(--space-8);
+    }
+
+    .catalogue {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+    }
+
+    /* Filter */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      padding: 0;
+      border: 0;
+
+      & label {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+        min-block-size: var(--target);
+        padding-inline: var(--space-4);
+        border: var(--rule-mid) solid var(--ink);
+        background: var(--sheet);
+        cursor: pointer;
+
+        &:hover {
+          border-color: var(--signal);
+        }
+      }
+
+      & input:checked + label {
+        background: var(--ink);
+        color: var(--paper);
+      }
+
+      & input:focus-visible + label {
+        outline: var(--rule-heavy) solid var(--signal);
+        outline-offset: 2px;
+      }
+    }
+
+    .count {
+      color: var(--graphite);
+    }
+
+    input:checked + label .count {
+      color: inherit;
+    }
+
+    .catalogue:has(#f-shipped:checked) .project:not([data-status='shipped']),
+    .catalogue:has(#f-in-progress:checked) .project:not([data-status='in-progress']) {
+      display: none;
+    }
+
+    /* Cards */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+      gap: var(--space-5);
+      padding: 0;
+      list-style: none;
+    }
+
+    .project {
+      scroll-margin-block-start: var(--space-6);
+
+      & article {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-3);
+        block-size: 100%;
+        padding: var(--space-5);
+        background: var(--sheet);
+        border: var(--rule-heavy) solid var(--ink);
+      }
+
+      &[data-featured] article {
+        border-block-start-width: var(--space-2);
+        border-block-start-color: var(--signal);
+      }
+
+      &:target article {
+        outline: var(--rule-heavy) solid var(--signal);
+        outline-offset: 4px;
+      }
+    }
+
+    .card-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    h3 {
+      font-stretch: 125%;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .summary {
+      color: var(--graphite);
+    }
+
+    .stack-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      padding: 0;
+      list-style: none;
+
+      & li {
+        padding: 1px var(--space-2);
+        background: var(--paper);
+        border: var(--rule-hair) solid var(--rule);
+      }
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      margin-block-start: auto;
+      padding-block-start: var(--space-3);
+      border-block-start: var(--rule-hair) solid var(--rule);
+
+      & a {
+        font-weight: 700;
+      }
+    }
+
+    .draft {
+      position: absolute;
+      inset-block-start: calc(-1 * var(--space-3));
+      inset-inline-end: var(--space-4);
+      padding-inline: var(--space-1);
+      background: var(--signal);
+      color: var(--on-signal);
+      font-weight: 700;
+    }
+
+    /* Graveyard */
+    .table-scroll {
+      overflow-x: auto;
+      border: var(--rule-heavy) solid var(--ink);
+      background: var(--sheet);
+    }
+
+    .graveyard {
+      inline-size: 100%;
+      min-inline-size: 40rem;
+      border-collapse: collapse;
+      font-size: var(--step-small);
+
+      & :is(th, td) {
+        padding: var(--space-3) var(--space-4);
+        text-align: start;
+        vertical-align: top;
+        border-block-end: var(--rule-hair) solid var(--rule);
+      }
+
+      & thead th {
+        background: var(--ink);
+        color: var(--paper);
+        font-family: var(--font-mono);
+        font-size: var(--step-tiny);
+        font-weight: 400;
+        text-transform: uppercase;
+      }
+
+      & tbody tr:last-child > * {
+        border-block-end: 0;
+      }
+
+      & tbody th {
+        font-weight: 800;
+
+        & .summary {
+          display: block;
+          font-weight: 400;
+        }
+      }
+
+      & tr:target {
+        background: color-mix(in oklab, var(--signal) 15%, transparent);
+      }
+    }
+
+    .empty {
+      padding-block: var(--space-4);
+      border-block: var(--rule-heavy) solid var(--ink);
+    }
+  }
+</style>
