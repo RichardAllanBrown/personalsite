@@ -5,8 +5,7 @@ import sitemap from '@astrojs/sitemap';
 import cspHeaders from './integrations/csp-headers.mjs';
 
 export default defineConfig({
-  // TODO: replace with the real domain once it's registered.
-  site: 'https://example.com',
+  site: 'https://richardallanbrown.com',
   trailingSlash: 'never',
   build: {
     format: 'file',

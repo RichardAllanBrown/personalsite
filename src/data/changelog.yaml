@@ -1,18 +1,20 @@
-# About page changelog, newest first: a career in semantic versioning.
 items:
-  - version: v4.0
-    period: now
-    title: '[Current role or chapter]'
-    line: '[One line. Breaking changes welcome.]'
   - version: v3.0
-    period: '[YEARS]'
-    title: '[Principal Engineer, Company]'
-    line: 'Breaking change: began saying “it depends” professionally.'
+    period: now
+    title: 'Solutions Architect @OUP'
+    line: 'Solving problem categories at a time'
+  - version: v2.1
+    period: '2024-2026'
+    title: 'Principal Solutions Architect @67Bricks'
+    line: 'Started saying “it depends” professionally'
   - version: v2.0
-    period: '[YEARS]'
-    title: '[Solutions Architect, Company]'
-    line: '[One line]'
+    period: '2015-2024'
+    title: 'Software Engineer @67Bricks'
+    line: 'Mid to Lead to Manager'
+  - version: v1.0
+    period: '2014-2015'
+    title: 'Software Developer @Skillweb'
   - version: v0.1
-    period: '[YEAR]'
-    title: '[First engineering job]'
-    line: '[Known issues at the time, honestly stated]'
+    period: '2011-2014'
+    title: 'Technology Grad Scheme @Experian'
+    line: 'Listen and learn'
