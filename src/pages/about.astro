@@ -58,9 +58,9 @@ const rcName = `~/.${site.name.split(' ')[0]!.toLowerCase()}rc`;
       <section class="stack" aria-labelledby="ports">
         <SectionHead id="ports" title="Open ports" note="all others filtered" />
         <ul class="ports" role="list">
-          {ports.map(({ port, protocol, label, href }) => (
+          {ports.map(({ port, protocol, label, link }) => (
             <li>
-              <a href={href}>
+              <a href={site.links[link]}>
                 <span class="label port">
                   {port}/{protocol}
                 </span>

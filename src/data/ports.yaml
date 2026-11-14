@@ -1,11 +1,6 @@
-# About page "open ports". Hrefs in [BRACKETS] still need real values.
+# About page "open ports". `link` is a key of `site.links` in src/site.config.ts.
 items:
-  - { port: 25, protocol: SMTP, label: Email, href: 'mailto:richard.allan.brown@gmail.com' }
-  - { port: 22, protocol: SSH-ish, label: GitHub, href: 'https://github.com/richardallanbrown' }
-  - {
-      port: 443,
-      protocol: Professional,
-      label: LinkedIn,
-      href: 'https://www.linkedin.com/in/richard-brown-464a0633',
-    }
-  - { port: 80, protocol: Feed, label: RSS, href: /rss.xml }
+  - { port: 25, protocol: SMTP, label: Email, link: email }
+  - { port: 22, protocol: SSH-ish, label: GitHub, link: github }
+  - { port: 443, protocol: Professional, label: LinkedIn, link: linkedin }
+  - { port: 80, protocol: Feed, label: RSS, link: rss }

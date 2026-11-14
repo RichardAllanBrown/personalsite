@@ -2,6 +2,7 @@ import { defineCollection, reference } from 'astro:content';
 import { glob, file } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { parse as parseYaml } from 'yaml';
+import { site } from './site.config';
 
 // Drafts render in `astro dev` and are filtered out of production builds (see src/lib/content.ts).
 const draft = z.boolean().default(false);
@@ -119,7 +120,8 @@ const ports = list(
     port: z.number().int(),
     protocol: z.string(),
     label: z.string(),
-    href: z.string(),
+    /** Key of `site.links`, so URLs live only in site.config.ts. */
+    link: z.enum(Object.keys(site.links) as [keyof typeof site.links]),
   }),
 );
 
