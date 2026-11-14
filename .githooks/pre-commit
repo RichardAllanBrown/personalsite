@@ -1,0 +1,15 @@
+#!/bin/sh
+# Run lint:fix before each commit and re-stage any staged files it changed.
+# Bypass with: git commit --no-verify
+set -e
+
+staged=$(git diff --cached --name-only --diff-filter=ACMR)
+[ -z "$staged" ] && exit 0
+
+pnpm run --silent lint:fix
+
+# Re-add only the files that were already staged, so fixes are included
+# without sweeping unrelated working-tree changes into the commit.
+echo "$staged" | while IFS= read -r f; do
+  [ -f "$f" ] && git add -- "$f"
+done
